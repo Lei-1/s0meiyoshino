@@ -11,7 +11,7 @@ BaseFWVer="7.1.2"
 BaseFWBuild="11D257"
 fi
 
-echo "Select downgeade iOS version"
+echo "Select downgrade iOS version"
 
 select iOSVer in "iOS 5" "iOS 6" "iOS 7" exit
 do
