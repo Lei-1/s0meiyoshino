@@ -1,13 +1,16 @@
-<h2>s0meiyoshino v1.4 b1</h2>
-It is a downgrade and untethered jailbreak tool to iOS 5.1.1, iOS 6 and iOS 7 that exploited the boot chain of iOS 7.1.2 using @xerub's De Rebus Antiquis.<br/>
+<h2>s0meiyoshino v2.0 b1</h2>
+It is a downgrade and untethered jailbreak tool to iOS 4.3.5, iOS 5.1.1, iOS 6 and iOS 7 that exploited the boot chain of iOS 7.1.2 using @xerub's De Rebus Antiquis.<br/>
 Operation confirmed with OS X 10.10.5 and MacOS 10.13.5</br>
 Please secure about 10 GB of free space.<br/>
 <br/>
-*Support for untethered downgrade to iOS 5.1.1-7.1.1 (without shsh)<br/>
+*Support for untethered downgrade to 5.1.1-7.1.1 (without shsh)<br/>
+<br/>
+*Beta support for untethered downgrade to iOS 4.3.5 (Christmas present!)<br/>
+**iOS 4.3.5 do not be restore with higher versions of macOS due to various problems.<br/>
+**iOS 4 has injected boot-args to disable CS.<br/>
+<br/>
 *Support for untethered jailbreak to iOS 7.0-7.1.1<br/>
 **Apple File Connection v2 is not included in iOS 7.1.x Jailbreak. <br/>
-**So, please install from Cydia.<br/>
-!!Jailbreaks below iOS 6 have been deleted. You can untethered jailbreak by install untether from Cydia after tethered jailbreak by redsn0w.</br>
 <br/>
 (1) Download IPSW<br/>
 <a href="https://ipsw.me">ipsw download (https://ipsw.me)</a><br/>
@@ -44,7 +47,13 @@ or<br/>
 (2) Jailbreak and tethered boot by redsn0w<br/>
 (3) exec command "nvram -d boot-partition"<br/>
 (4) reboot and restore<br/>
-
+<br/>
+<h3>How to jailbreak iOS 4.3.5</h3><br/>
+(1) Tethered Jailbreak by redsn0w.<br/>
+(2) Tethered Boot by redsn0w.<br/>
+(3) Replace kernelcache with pwnedkc of redsn0w.<br/>
+(4) Reboot!<br/>
+<br/>
 <h3>Credit</h3>
 @xerub for <a href="https://xerub.github.io/ios/iboot/2018/05/10/de-rebus-antiquis.html">De Rebus Antiquis</a><br/>
 @danzatt for <a href="https://github.com/danzatt/ios-dualboot">ios-dualboot(hfs_resize etc.)</a><br/>
@@ -62,5 +71,3 @@ Roderick W. Smith - for gptfdisk<br/>
 @axi0mX for <a href="https://github.com/axi0mX/ipwndfu">ipwndfu</a><br/>
 @posixninja and @pod2g for SHAtter exploit<br/>
 <br/>
-<h3>To a specific tool creator</h3>
-Your tool needs to display my tool as credit and link.<br/>

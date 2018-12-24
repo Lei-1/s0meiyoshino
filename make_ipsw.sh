@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "s0meiyoshino v1.4 b1 make_ipsw.sh"
+echo "s0meiyoshino v2.0b1 make_ipsw.sh"
 
 echo "iPhone3,1 only"
 Identifier="iPhone3,1"
@@ -11,10 +11,54 @@ BaseFWVer="7.1.2"
 BaseFWBuild="11D257"
 fi
 
+if [ -e ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw" ]; then
+echo ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw OK"
+else
+echo ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw does not exist"
+exit
+fi
+
 echo "Select downgrade iOS version"
 
-select iOSVer in "iOS 5" "iOS 6" "iOS 7" exit
+select iOSVer in "iOS 4" "iOS 5" "iOS 6" "iOS 7" exit
 do
+if [ "$iOSVer" = "iOS 4" ]; then
+iOSLIST="4"
+echo "Select iOS 4.3.x [beta support] [OSX<10.11]"
+select iOSVers in "iOS 4.3.5"
+do
+if [ "$iOSVers" = "iOS 4.3.5" ]; then
+
+## make scab
+echo "Please connect the target device to USB."
+read -p "<enter>: "
+echo "getting shsh..."
+ECID="$((./bin/idevicerestore -t "$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw) | sed -n -e 's/^.*Found ECID //p')"
+if [ -e "shsh/"$ECID"-iPhone3,1-7.1.2.shsh" ]; then
+zcat< shsh/"$ECID"-iPhone3,1-7.1.2.shsh > shsh/"$ECID"-iPhone3,1-7.1.2.plist
+plutil -extract 'APTicket' xml1 shsh/"$ECID"-iPhone3,1-7.1.2.plist -o 'shsh/apticket.plist'
+cat shsh/apticket.plist | sed -ne '/<data>/,/<\/data>/p' | sed -e "s/<data>//" | sed  "s/<\/data>//" | awk '{printf "%s",$0}' | base64 --decode > shsh/apticket.der
+bin/xpwntool shsh/apticket.der src/"$ECID"-apticket.img3 -t src/scab_template.img3
+
+rm shsh/apticket.der
+rm shsh/apticket.plist
+rm shsh/"$ECID"-iPhone3,1-7.1.2.plist
+
+### Patching iBoot-1072.61~6
+iOSVersion="4.3.5_8L1"
+iOSBuild="8L1"
+RestoreRamdisk="038-2265-002.dmg"
+iBoot_Key="b4e300c54a9dd2e648ead50794e9bf2205a489c310a1c70a9fae687368229468"
+iBoot_IV="986032eecd861c37ca2a86b6496a3c0d"
+break
+fi
+echo "failed get shsh"
+echo "Select iOS 4.3.x"
+fi
+done
+break
+fi
+
 if [ "$iOSVer" = "iOS 5" ]; then
 iOSLIST="6"
 echo "Select iOS 5.x"
@@ -33,6 +77,7 @@ fi
 done
 break
 fi
+
 if [ "$iOSVer" = "iOS 6" ]; then
 iOSLIST="6"
 echo "Select iOS 6.x"
@@ -91,6 +136,7 @@ fi
 done
 break
 fi
+
 if [ "$iOSVer" = "iOS 7" ]; then
 iOSLIST="7"
 echo "Select iOS 7.x"
@@ -181,18 +227,13 @@ echo ""$Identifier"_"$iOSVersion"_Restore.ipsw does not exist"
 exit
 fi
 
-if [ -e ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw" ]; then
-echo ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw OK"
-else
-echo ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw does not exist"
-exit
-fi
-
 if [ -d "tmp_ipsw" ]; then
 rm -r tmp_ipsw
 rm -r FirmwareBundles/*
 fi
 echo ""
+
+## Setting Firmware Bundles
 if [ "$iOSLIST" = "7" ]; then
 echo "Jailbreak?"
 select Jailbreak in Yes No
@@ -209,16 +250,34 @@ break
 fi
 done
 else
+if [ "$iOSLIST" = "4" ]; then
+cp -a Bundles/Down_"$Identifier"_"$iOSVersion".bundle FirmwareBundles/
+else
 JB="disable"
 cp -a Bundles/Down_"$Identifier"_"$iOSVersion".bundle FirmwareBundles/
 fi
+fi
+
 mkdir tmp_ipsw
 cd tmp_ipsw
+
+## Decrypt iBoot
 unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3"
 ../bin/xpwntool iBoot."$InternalName".RELEASE.img3 iBoot."$InternalName".dec.img3 -k $iBoot_Key -iv $iBoot_IV -decrypt
 ../bin/xpwntool iBoot."$InternalName".dec.img3 iBoot."$InternalName".dec
 echo ""
 
+## Patching iBoot4
+if [ "$iOSLIST" = "4" ]; then
+## Patching iBoot4
+bspatch iBoot."$InternalName".dec PwnediBoot."$InternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/iBoot."$InternalName".RELEASE.patch
+../bin/xpwntool PwnediBoot."$InternalName".dec iBoot -t iBoot."$InternalName".dec.img3
+echo "0000010: 63656269" | xxd -r - iBoot
+echo "0000020: 63656269" | xxd -r - iBoot
+tar -cvf bootloader4.tar iBoot
+
+else
+## Patching iBoot5/6/7
 if [ "$JB" = "enable" ]; then
 echo "Enable verbose boot?"
 select Verbose in Yes No
@@ -257,12 +316,16 @@ echo "0000010: 63656269" | xxd -r - PwnediBoot."$InternalName".img3
 echo "0000020: 63656269" | xxd -r - PwnediBoot."$InternalName".img3
 mv -v PwnediBoot."$InternalName".img3 iBEC
 tar -cvf bootloader.tar iBEC
+fi
+
 cd ../
 ### Make custom ipsw by odysseus
-if [ "$JB" = "enable" ]; then
-if [ "$iOSLIST" = "7" ]; then
-./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory -ramdiskgrow 2000 tmp_ipsw/bootloader.tar src/Cydia7.tar
+if [ "$iOSLIST" = "4" ]; then
+./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory
 fi
+
+if [ "$JB" = "enable" ]; then
+./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory -ramdiskgrow 2000 tmp_ipsw/bootloader.tar src/Cydia7.tar
 fi
 
 if [ "$JB" = "disable" ]; then
@@ -285,6 +348,36 @@ unzip -j ../"$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw "Firmware/all
 
 mkdir $iOSBuild
 unzip -d $iOSBuild "$Identifier"_"$iOSVersion"_Odysseus.ipsw
+
+if [ "$iOSLIST" = "4" ]; then
+## rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging1-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batteryfull-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
+rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
+
+echo "0000010: 34676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo-640x960."$SoC".img3
+echo "0000020: 34676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo-640x960."$SoC".img3
+
+mv -v ../src/"$ECID"-apticket.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/apticket.img3
+cp -a -v ../src/manifest4 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
+mv -v $BaseFWBuild/applelogo@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo7-640x960."$SoC".img3
+mv -v $BaseFWBuild/batterycharging0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
+mv -v $BaseFWBuild/batterycharging1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging1-640x960."$SoC".img3
+mv -v $BaseFWBuild/batteryfull@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batteryfull-640x960."$SoC".img3
+mv -v $BaseFWBuild/batterylow0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
+mv -v $BaseFWBuild/batterylow1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
+mv -v $BaseFWBuild/glyphplugin@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
+mv -v $BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
+mv -v $BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+mv -v $BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
+fi
 
 if [ "$iOSLIST" = "6" ]; then
 rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo@2x."$SoC".img3
@@ -340,25 +433,45 @@ else
 echo "failed"
 exit
 fi
-## attach ramdisk ##
+
+## attach ramdisk4/5/6/7 ##
+if [ "$iOSLIST" = "4" ]; then
+hdiutil resize $iOSBuild/ramdisk.dmg -size 30m
 hdiutil attach -mountpoint ramdisk/ $iOSBuild/ramdisk.dmg
 sleep 1s
+mv -v ramdisk/sbin/reboot ramdisk/sbin/._
+tar -xvf ../src/bin4.tar -C ramdisk/ --preserve-permissions
+tar -xvf bootloader4.tar -C ramdisk/ --preserve-permissions
+mv -v ramdisk/usr/share/progressui/images-2x/applelogo.png ramdisk/usr/share/progressui/images-2x/applelogo_orig.png
+bspatch ramdisk/usr/share/progressui/images-2x/applelogo_orig.png ramdisk/usr/share/progressui/images-2x/applelogo.png ../patch/applelogo.patch
+fi
 
+if [ "$iOSLIST" = "6" ]; then
+hdiutil attach -mountpoint ramdisk/ $iOSBuild/ramdisk.dmg
+sleep 1s
 tar -xvf ../src/bin.tar -C ramdisk/ --preserve-permissions
 mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
 cp -a -v ../src/partition.sh ramdisk/sbin/reboot
 cp -a -v ../src/ramdiskH.dmg ramdisk/
 chmod 755 ramdisk/sbin/reboot
 
-if [ "$iOSLIST" = "6" ]; then
 mv -v ramdisk/usr/share/progressui/images-2x/applelogo.png ramdisk/usr/share/progressui/images-2x/applelogo_orig.png
 bspatch ramdisk/usr/share/progressui/images-2x/applelogo_orig.png ramdisk/usr/share/progressui/images-2x/applelogo.png ../patch/applelogo.patch
 fi
 
 if [ "$iOSLIST" = "7" ]; then
+hdiutil attach -mountpoint ramdisk/ $iOSBuild/ramdisk.dmg
+sleep 1s
+tar -xvf ../src/bin.tar -C ramdisk/ --preserve-permissions
+mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
+cp -a -v ../src/partition.sh ramdisk/sbin/reboot
+cp -a -v ../src/ramdiskH.dmg ramdisk/
+chmod 755 ramdisk/sbin/reboot
+
 mv -v ramdisk/usr/share/progressui/applelogo@2x.tga ramdisk/usr/share/progressui/applelogo_orig.tga
 bspatch ramdisk/usr/share/progressui/applelogo_orig.tga ramdisk/usr/share/progressui/applelogo@2x.tga ../patch/applelogo7.patch
 fi
+
 sleep 1s
 
 hdiutil detach ramdisk/

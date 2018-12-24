@@ -10,7 +10,7 @@
 ## rm -r __MACOSX
 
 ## ipsw, idevicerestore, xpwntool from "https://www.dropbox.com/s/oakjm4dgmuutsuf/odysseusOTA-v2.4.zip"
-
+## idevicerestore_old by Odysseus
 mkdir shsh
 mkdir FirmwareBundles
 
