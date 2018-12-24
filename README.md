@@ -60,7 +60,7 @@ or<br/>
 Roderick W. Smith - for gptfdisk<br/>
 @iH8sn0w for <a href="https://github.com/iH8sn0w/iBoot32Patcher">iBoot32Patcher</a><br/>
 @tihmstar for <a href="https://github.com/tihmstar/iBoot32Patcher">Improvement of iBoot32Patcher</a><br/>
-@nyan_satan for <a href="https://github.com/NyanSatan/iBoot32Patcher">Improvement of iBoot32Patcher</a><br/>
+@nyan_satan for <a href="https://github.com/NyanSatan/iBoot32Patcher">Improvement of iBoot32Patcher</a> and <a href="https://github.com/NyanSatan/TwistedMind2">TwistedMind2</a><br/>
 @ShadowLee19 for iBoot patch<br/>
 @JonathanSeals for many tips<br/>
 @Benfxmth for many tips<br/>
