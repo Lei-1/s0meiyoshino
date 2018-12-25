@@ -24,10 +24,23 @@ select iOSVer in "iOS 4" "iOS 5" "iOS 6" "iOS 7" exit
 do
 if [ "$iOSVer" = "iOS 4" ]; then
 iOSLIST="4"
-echo "Select iOS 4.3.x [beta support] [OSX<10.11]"
+echo "Select iOS 4.3.x [beta support]"
 select iOSVers in "iOS 4.3.5"
 do
 if [ "$iOSVers" = "iOS 4.3.5" ]; then
+
+echo "Select OSX Ver"
+select OSXVer in "Yosemite" "AfterElCap"
+do
+if [ "$OSXVer" = "Yosemite" ]; then
+OSX="10"
+break
+fi
+if [ "$OSXVer" = "AfterElCap" ]; then
+OSX="11"
+break
+fi
+done
 
 ## make scab
 echo "Please connect the target device to USB."
@@ -367,6 +380,12 @@ echo "0000020: 34676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$Int
 
 mv -v ../src/"$ECID"-apticket.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/apticket.img3
 cp -a -v ../src/manifest4 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
+
+if [ "$OSX" = "11" ]; then
+mv -v $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/apticket.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogoT-640x960."$SoC".img3
+cp -a -v ../src/manifest4x $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
+fi
+
 mv -v $BaseFWBuild/applelogo@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo7-640x960."$SoC".img3
 mv -v $BaseFWBuild/batterycharging0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
 mv -v $BaseFWBuild/batterycharging1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging1-640x960."$SoC".img3

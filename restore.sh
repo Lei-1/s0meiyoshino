@@ -111,7 +111,21 @@ fi
 
 ### Restore
 if [ "$iOSList" = "4" ]; then
+echo "Select macOS version"
+select OSXVer in Yosemite AfterElCap
+do
+if [ "$OSXVer" = "Yosemite" ]; then
 ./bin/idevicerestore_old -e -w "$iOS_IPSW"_Custom.ipsw
+break
+fi
+
+if [ "$OSXVer" = "AfterElCap" ]; then
+echo "[WARNING] BETA VERSION"
+./bin/idevicerestore -e -w "$iOS_IPSW"_Custom.ipsw
+break
+fi
+done
+
 else
 ./bin/idevicerestore -e -w "$iOS_IPSW"_Custom.ipsw
 fi
