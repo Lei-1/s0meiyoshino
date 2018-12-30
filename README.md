@@ -1,12 +1,12 @@
-<h2>s0meiyoshino v2.0 b2</h2>
+<h2>s0meiyoshino v2.0 b3</h2>
 It is a downgrade and untethered jailbreak tool to iOS 4.3.5, iOS 5.1.1, iOS 6 and iOS 7 that exploited the boot chain of iOS 7.1.2 using @xerub's De Rebus Antiquis.<br/>
 Operation confirmed with OS X 10.10.5 and MacOS 10.13.5</br>
 Please secure about 10 GB of free space.<br/>
 <br/>
 *Support for untethered downgrade to 5.1.1-7.1.1 (without shsh)<br/>
 <br/>
-*Beta support for untethered downgrade to iOS 4.3.5 (Christmas present!)<br/>
-**iOS 4.3.5 do not be restore with higher versions of macOS due to various problems.<br/>
+*Support for untethered downgrade to iOS 4.3.5<br/>
+*"BETA" Support for untethered downgrade to iOS 4.3.3<br/>
 **iOS 4 has injected boot-args to disable CS.<br/>
 <br/>
 *Support for untethered jailbreak to iOS 7.0-7.1.1<br/>
