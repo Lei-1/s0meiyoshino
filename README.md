@@ -1,4 +1,4 @@
-<h2>s0meiyoshino v2.0 b4</h2>
+<h2>s0meiyoshino v3.0 b1</h2>
 It is a downgrade and untethered jailbreak tool to iOS 4.3.5, iOS 5.1.1, iOS 6 and iOS 7 that exploited the boot chain of iOS 7.1.2 using @xerub's De Rebus Antiquis.<br/>
 Operation confirmed with OS X 10.10.5 and MacOS 10.13.5</br>
 Please secure about 10 GB of free space.<br/>
@@ -9,9 +9,6 @@ Please secure about 10 GB of free space.<br/>
 *"BETA" Support for untethered downgrade to iOS 4.3.3<br/>
 **iOS 4 has injected boot-args to disable CS.<br/>
 <br/>
-*Support for untethered jailbreak to iOS 7.0-7.1.1<br/>
-**Apple File Connection v2 is not included in iOS 7.1.x Jailbreak. <br/>
-<br/>
 (1) Download IPSW<br/>
 <a href="https://ipsw.me">ipsw download (https://ipsw.me)</a><br/>
 Prepare firmware you want to downgrade and "iPhone3,1_7.1.2_11D257_Restore.ipsw" and put it in s0meiyoshino.<br/>
@@ -20,7 +17,15 @@ Prepare firmware you want to downgrade and "iPhone3,1_7.1.2_11D257_Restore.ipsw"
 ./install.sh<br/>
 
 (2) make ipsw<br/>
-./make_ipsw.sh<br/>
+./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [args]<br/>
+
+[OPTION]<br/>
+--verbose                 : Inject Boot-args "-v"<br/>
+--cs-disable              : Inject Boot-args "cs_enforcement_disable=1"<br/>
+--cs-disable-verbose      : Inject Boot-args "cs_enforcement_disable=1 -v"<br/>
+
+example: ./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose<br/>
+
 Firmware will be created.<br/>
 Since choices are displayed, please select as necessary.<br/>
 
@@ -59,7 +64,7 @@ or<br/>
 @danzatt for <a href="https://github.com/danzatt/ios-dualboot">ios-dualboot(hfs_resize etc.)</a><br/>
 Roderick W. Smith - for gptfdisk<br/>
 @iH8sn0w for <a href="https://github.com/iH8sn0w/iBoot32Patcher">iBoot32Patcher</a><br/>
-@tihmstar for <a href="https://github.com/tihmstar/iBoot32Patcher">Improvement of iBoot32Patcher</a><br/>
+@tihmstar for <a href="https://github.com/tihmstar/iBoot32Patcher">Improvement of iBoot32Patcher</a>, <a href="https://github.com/tihmstar/partialZipBrowser">partialZipBrowser</a><br/>
 @nyan_satan for <a href="https://github.com/NyanSatan/iBoot32Patcher">Improvement of iBoot32Patcher</a> and <a href="https://github.com/NyanSatan/TwistedMind2">TwistedMind2</a><br/>
 @ShadowLee19 for iBoot patch<br/>
 @JonathanSeals for many tips<br/>
