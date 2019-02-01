@@ -8,7 +8,7 @@
     <tbody>
         <tr>
             <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"> </p>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">iOS</p>
             </td>
             <td>
                 <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>iPhone3,1</strong></span></p>
@@ -25,7 +25,7 @@
                 <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">incomplete</span></p>
             </td>
             <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"> </p>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</p>
             </td>
         </tr>
         <tr>
@@ -36,7 +36,7 @@
                 <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
             </td>
             <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"> </p>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</p>
             </td>
         </tr>
         <tr>
@@ -47,7 +47,7 @@
                 <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
             </td>
             <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"> </p>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</p>
             </td>
         </tr>
         <tr>
@@ -110,7 +110,7 @@
                 <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>6.1.4</strong></span></p>
             </td>
             <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</span></p>
             </td>
             <td>
                 <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes (7.0-7.0.6 blobs)</span></p>
