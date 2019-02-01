@@ -197,9 +197,9 @@
 </table>
 <br/>
 <h3>How to use</h3>
-<h4>Download IPSW<h4/>
+<h4>Download IPSW</h4>
 <a href="https://ipsw.me">ipsw download (https://ipsw.me)</a><br/>
-Prepare firmware you want to downgrade and "iPhone3,1_7.1.2_11D257_Restore.ipsw" and put it in s0meiyoshino.<br/>
+<p>Prepare put it firmware (base-ipsw, downgrade-ver-ipsw) in s0meiyoshino.<br/></p>
 <p></p>
 <h4>Install packages</h4>
 ./install.sh<br/>
