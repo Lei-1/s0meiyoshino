@@ -3,6 +3,12 @@
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5</p>
 <p>Please secure about 10 GB of free space.</p>
 <br/>
+<h3>Warning</h3>
+<p>This tool enables exploit of iBoot.</p>
+<p>Therefore your device can be attacked from iBoot.</p>
+<p>If you have a blob, downgrade it using it is much safer.</p>
+<p>In the case of iPhone 4, it does not matter because it is already pwned by Bootrom vulnerability.</p>
+<p></p>
 <h3>Supported version</h3>
 <table style="border-collapse: collapse;" cellspacing="0" cellpadding="0">
     <tbody>
@@ -196,15 +202,15 @@
     </tbody>
 </table>
 <br/>
-<h3>How to use</h3>
-<h4>Download IPSW</h4>
+<h2>How to use</h2>
+<h3>Download IPSW</h3>
 <a href="https://ipsw.me">ipsw download (https://ipsw.me)</a><br/>
 <p>Prepare put it firmware (base-ipsw, downgrade-ver-ipsw) in s0meiyoshino.<br/></p>
 <p></p>
-<h4>Install packages</h4>
+<h3>Install packages</h3>
 ./install.sh<br/>
 <p></p>
-<h4>make ipsw</h4>
+<h3>make ipsw</h3>
 <p>./make_ipsw.sh [device model] [downgrade-iOS] [base-iOS] [args]<br/>
 <p></p>
 <p>[OPTION]</p>
@@ -216,12 +222,12 @@
 <p>Firmware will be created.</p>
 <p>Since choices are displayed, please select as necessary.</p>
 <p></p>
-<h4>Restore (iPhone 4)</h4>
+<h3>Restore (iPhone 4)</h3>
 <p>First, put in device "DFU mode".</p>
 <p>Then, execute the following.</p>
 <p>./restore4.sh</p>
 <p></p>
-<h4>Restore (iPhone 5)</h4>
+<h3>Restore (iPhone 5)</h3>
 <p>First, put shsh of 7.0.x in the shsh/ directory.</p>
 <p>And, change shsh file name. If you want to downgrade to 6.1.4, it will be as follows.</p>
 <p>[ECID]-iPhone5,2-7.0.x.shsh -> [ECID]-iPhone5,2-6.1.4.shsh</p>
@@ -230,7 +236,7 @@
 <p>Then, execute the following.</p>
 <p>bin/idevicerestore -e -w [CUSTOM_IPSW]</p>
 <p></p>
-<h3>How to delete exploit (iPhone 4)</h3>
+<h2>How to delete exploit (iPhone 4)</h2>
 <p>This method adds "boot-partition=2" to the nvram variable.</p>
 <p>Even if you restore it with OFW in iTunes, it will be in recovery mode as it is.</p>
 <p></p>
@@ -249,7 +255,7 @@
 <p>(3) exec command "nvram -d boot-partition"</p>
 <p>(4) reboot and restore</p>
 <p></p>
-<h3>How to delete exploit (iPhone 5)</h3>
+<h2>How to delete exploit (iPhone 5)</h2>
 <p>This method adds "boot-partition", and "boot-ramdisk" to the nvram variable.</p>
 <p>However, since iOS 9 and later ignore this, if you want to restore it, do as follows.</p>
 <p>(1) Restore iOS 9.0-10.3.3</p>
@@ -258,13 +264,13 @@
 <p>(4) Execution command "nvram -d boot-ramdisk"</p>
 <p>(5) Reboot</p>
 <p></p>
-<h3>How to jailbreak iOS 4.3.5</h3>
+<h2>How to jailbreak iOS 4.3.5</h2>
 <p>(1) Tethered Jailbreak by redsn0w.</p>
 <p>(2) Tethered Boot by redsn0w.</p>
 <p>(3) Replace kernelcache with pwnedkc of redsn0w.</p>
 <p>(4) Reboot!</p>
 <p></p>
-<h3>Credit</h3>
+<h2>Credit</h2>
 <p>@xerub for <a href="https://xerub.github.io/ios/iboot/2018/05/10/de-rebus-antiquis.html">De Rebus Antiquis</a></p>
 <p>@danzatt for <a href="https://github.com/danzatt/ios-dualboot">ios-dualboot(hfs_resize etc.)</a></p>
 <p>Roderick W. Smith - for gptfdisk</p>
