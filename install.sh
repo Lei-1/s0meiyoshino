@@ -45,7 +45,7 @@ unzip -d bin/ partialZipBrowser.zip
 rm -v partialZipBrowser.zip
 fi
 
-if [ -e "src/iPhone5,2/BB/Mav5-8.02.00.Release.bbfw" ]; then
+if [ -e "src/iPhone5,2/BB/Mav5-8.02.00.Release.bbfw" ]&&[ -e "src/iPhone5,2/BB/Mav5-8.02.00.Release.plist" ]; then
 echo "BBFW (Mav5-8.02.00) already exist"
 else
 mkdir -p src/iPhone5,2/BB/
