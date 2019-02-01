@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.0 make_ipsw.sh ****"
+echo "**** s0meiyoshino v3.1 make_ipsw.sh ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [args]"
@@ -19,7 +19,7 @@ if [ $# == 4 ]; then
         echo "[ERROR] Invalid argument"
         exit
     fi
-    if [ $4 != "--cs-disable" ]&&[ $4 != "--cs-disable-verbose" ]; then
+    if [ $4 = "--cs-disable" ]&&[ $4 = "--cs-disable-verbose" ]; then
         echo "You need to get PE_i_can_has_debuger=1."
     fi
 fi
@@ -36,6 +36,7 @@ if [ $1 = "iPhone3,1" ]; then
     Image="2x~iphone-30pin"
     BaseFWVer="7.1.2"
     BaseFWBuild="11D257"
+    Size="2x"
 fi
 
 if [ $1 = "iPhone5,2" ]; then
@@ -44,6 +45,7 @@ if [ $1 = "iPhone5,2" ]; then
         InternalName="n42ap"
         SoC="s5l8950x"
         Image="1136~iphone-lightning"
+        Size="1136"
         if [ $3 = "7.0" ]; then
             BaseFWVer="7.0"
             BaseFWBuild="11A465"
@@ -326,6 +328,20 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="c13c3705190682c2d4253ecea7910c56"
         DD=1
     fi
+
+    if [ $2 = "7.1.2" ]; then
+        #### iOS 6.1.4 ####
+        ## iBoot-1537.9.55~11
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.1.2_11D257"
+        iOSBuild="11D257"
+        RestoreRamdisk="058-4276-009.dmg"
+        iBoot_Key="b23dbe781086f6000cba372e5e8ae01c3f61c032ab1fb6729129707e3ccb9463"
+        iBoot_IV="422b9c5e642ff797dc38b9910f084826"
+        DD=1
+fi
 fi
 
 if [ $DD == 0 ]; then
@@ -408,9 +424,11 @@ if [ "$iOSLIST" != "4" ]; then
     echo "$Boot_Partition_Patch" | xxd -r - PwnediBoot."$InternalName".dec
     if [ $Identifier = "iPhone5,2" ]; then
         echo "$Boot_Ramdisk_Patch" | xxd -r - PwnediBoot."$InternalName".dec
-        ../bin/iBoot32Patcher PwnediBoot."$InternalName".dec PwnediBoot2."$InternalName".dec -r
-        rm PwnediBoot."$InternalName".dec
-        mv PwnediBoot2."$InternalName".dec PwnediBoot."$InternalName".dec
+        if [ $iOSLIST = "6" ]; then
+            ../bin/iBoot32Patcher PwnediBoot."$InternalName".dec PwnediBoot2."$InternalName".dec -r
+            rm PwnediBoot."$InternalName".dec
+            mv PwnediBoot2."$InternalName".dec PwnediBoot."$InternalName".dec
+        fi
     fi
 
     ../bin/xpwntool PwnediBoot."$InternalName".dec PwnediBoot."$InternalName".img3 -t iBoot."$InternalName".dec.img3
@@ -539,12 +557,8 @@ if [ "$iOSLIST" = "6" ]; then
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin@2x."$SoC".img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
-    if [ $Identifier = "iPhone3,1" ]; then
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@2x~iphone."$SoC".img3
-    fi
-    if [ $Identifier = "iPhone5,2" ]; then
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@1136~iphone."$SoC".img3
-    fi
+    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@"$Size"~iphone."$SoC".img3
+
     mv -v BaseFWBuild/applelogo@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo@2x."$SoC".img3
     mv -v BaseFWBuild/batterycharging0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0@2x."$SoC".img3
     mv -v BaseFWBuild/batterycharging1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging1@2x."$SoC".img3
@@ -554,12 +568,7 @@ if [ "$iOSLIST" = "6" ]; then
     mv -v BaseFWBuild/glyphplugin@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin@2x."$SoC".img3
     mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
     mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
-    if [ $Identifier = "iPhone3,1" ]; then
-        mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@2x~iphone."$SoC".img3
-    fi
-    if [ $Identifier = "iPhone5,2" ]; then
-        mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@1136~iphone."$SoC".img3
-    fi
+    mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@"$Size"~iphone."$SoC".img3
 fi
 
 if [ "$iOSLIST" = "7" ]; then

@@ -1,4 +1,4 @@
-<h2>s0meiyoshino v3.0</h2>
+<h2>s0meiyoshino v3.1</h2>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4.3.5, iOS 5.1.1, iOS 6 and iOS 7 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -199,8 +199,20 @@
                 <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
             </td>
         </tr>
+        <tr>
+            <td>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.1.2</strong></span></p>
+            </td>
+            <td>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
+            </td>
+            <td>
+                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
+            </td>
+        </tr>
     </tbody>
 </table>
+<p>The bundle is provided from <a href="https://github.com/dora2-iOS/xpwn/tree/master/ipsw-patch/FirmwareBundles">here</a>.</p>
 <br/>
 <h2>How to use</h2>
 <h3>Download IPSW</h3>
