@@ -17,8 +17,8 @@ if [ -e "iloader" ]; then
 echo "iloader already exist"
 else
 git clone https://github.com/dora2-iOS/iloader.git
-mkdir -p ./src/iPhone3,1/11D257/
-mkdir -p ./src/iPhone5,2/11B554a/
+mkdir src/iPhone3,1/11D257/
+mkdir src/iPhone5,2/11B554a/
 cp -a iloader/iPhone3,1/11D257/ramdiskH_beta4.dmg ./src/iPhone3,1/11D257/ramdiskH.dmg
 cp -a iloader/iPhone5,2/11B554a/ramdiskH_beta4.dmg ./src/iPhone5,2/11B554a/ramdiskH.dmg
 fi
@@ -48,7 +48,24 @@ fi
 if [ -e "src/iPhone5,2/BB/Mav5-8.02.00.Release.bbfw" ]; then
 echo "BBFW (Mav5-8.02.00) already exist"
 else
-echo "eta son!"
+mkdir -p src/iPhone5,2/BB/
+bin/partialZipBrowser -g Firmware/Mav5-8.02.00.Release.bbfw http://appldnld.apple.com/ios8.4.1/031-31065-20150812-7518F132-3C8F-11E5-A96A-A11A3A53DB92/iPhone5,2_8.4.1_12H321_Restore.ipsw
+bin/partialZipBrowser -g Firmware/Mav5-8.02.00.Release.plist http://appldnld.apple.com/ios8.4.1/031-31065-20150812-7518F132-3C8F-11E5-A96A-A11A3A53DB92/iPhone5,2_8.4.1_12H321_Restore.ipsw
+mv -v Mav5-8.02.00.Release.bbfw src/iPhone5,2/BB/
+mv -v Mav5-8.02.00.Release.plist src/iPhone5,2/BB/
+echo ybHEo3Fv0y/6IYp0X45hxqDY7zM= | base64 --decode > src/iPhone5,2/BB/UniqueBuildID
+echo DJiAwPNNOmT4P9RdlHUt3Q2TTHc= | base64 --decode > src/iPhone5,2/BB/APPSDownloadDigest
+echo x5Xkaqqkc+l3NFLL6s3kAi5P7Sk= | base64 --decode > src/iPhone5,2/BB/APPSHashTableDigest
+echo dFi5J+pSSqOfz31fIvmah2GJO+E= | base64 --decode > src/iPhone5,2/BB/DSP1DownloadDigest
+echo HXUnmGmwIHbVLxkT1rHLm5V6iDM= | base64 --decode > src/iPhone5,2/BB/DSP1HashTableDigest
+echo qtTu6JED2pyocdNVYT1uWN2Back= | base64 --decode > src/iPhone5,2/BB/DSP2DownloadDigest
+echo 2rQ7whhh/WrHPUPMwT5lcsIkYDA= | base64 --decode > src/iPhone5,2/BB/DSP2HashTableDigest
+echo MZ1ERfoeFcbe79pFAl/hbWUSYKc= | base64 --decode > src/iPhone5,2/BB/DSP3DownloadDigest
+echo sKmLhQcjfaOliydm+iwxucr9DGw= | base64 --decode > src/iPhone5,2/BB/DSP3HashTableDigest
+echo 051DfVgeFDI3DC9Hw35HGXCmgkM= | base64 --decode > src/iPhone5,2/BB/RPMDownloadDigest
+echo fAAAAEAQAgDAcZDeGqmO8LWlCHcYIPVjFqR87A== | base64 --decode > src/iPhone5,2/BB/RestoreSBL1PartialDigest
+echo ZAAAAIC9AQACxiFAOjelZm4NtrrLc8bPJIRQNA== | base64 --decode > src/iPhone5,2/BB/SBL1PartialDigest
+echo LycXsLwawICZf2dMjev2yhZs+ic= | base64 --decode > src/iPhone5,2/BB/SBL2DownloadDigest
 fi
 
 echo "Done!"

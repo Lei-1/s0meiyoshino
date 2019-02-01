@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "**** s0meiyoshino v2.0b4 restore.sh ****"
+echo "**** s0meiyoshino v2.0 restore4.sh ****"
 echo "iPhone3,1 only"
 
 OSXVer=`sw_vers -productVersion | awk -F. '{print $2}'`

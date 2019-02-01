@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.0 beta 1 make_ipsw.sh ****"
+echo "**** s0meiyoshino v3.0 make_ipsw.sh ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [args]"
@@ -20,7 +20,7 @@ if [ $# == 4 ]; then
         exit
     fi
     if [ $4 != "--cs-disable" ]&&[ $4 != "--cs-disable-verbose" ]; then
-    echo "You need to get PE_i_can_has_debuger=1."
+        echo "You need to get PE_i_can_has_debuger=1."
     fi
 fi
 
@@ -39,8 +39,6 @@ if [ $1 = "iPhone3,1" ]; then
 fi
 
 if [ $1 = "iPhone5,2" ]; then
-    echo "[ERROR] This device is NOT supported!!"
-    exit
     if [ $3 = "7.0" ] || [ $3 = "7.0.2" ] || [ $3 = "7.0.3" ] || [ $3 = "7.0.4" ] || [ $3 = "7.0.6" ]; then
         Identifier="iPhone5,2"
         InternalName="n42ap"
@@ -410,6 +408,9 @@ if [ "$iOSLIST" != "4" ]; then
     echo "$Boot_Partition_Patch" | xxd -r - PwnediBoot."$InternalName".dec
     if [ $Identifier = "iPhone5,2" ]; then
         echo "$Boot_Ramdisk_Patch" | xxd -r - PwnediBoot."$InternalName".dec
+        ../bin/iBoot32Patcher PwnediBoot."$InternalName".dec PwnediBoot2."$InternalName".dec -r
+        rm PwnediBoot."$InternalName".dec
+        mv PwnediBoot2."$InternalName".dec PwnediBoot."$InternalName".dec
     fi
 
     ../bin/xpwntool PwnediBoot."$InternalName".dec PwnediBoot."$InternalName".img3 -t iBoot."$InternalName".dec.img3
@@ -665,7 +666,7 @@ if [ $Identifier = "iPhone5,2" ]; then
     tar -xvf ../src/iPhone5,2/bin.tar -C ramdisk/ --preserve-permissions
     mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
     cp -a -v ../src/iPhone5,2/partition.sh ramdisk/sbin/reboot
-    cp -a -v ../src/iPhone5,2/11D257/ramdiskH.dmg ramdisk/
+    cp -a -v ../src/iPhone5,2/11B554a/ramdiskH.dmg ramdisk/
 chmod 755 ramdisk/sbin/reboot
 fi
 
