@@ -8,7 +8,7 @@
 <p>Therefore your device can be attacked from iBoot.</p>
 <p>If you have a blob, downgrade it using it is much safer.</p>
 <p>In the case of iPhone 4, it does not matter because it is already pwned by Bootrom vulnerability.</p>
-<p></p>
+<br/>
 <h3>Supported version</h3>
 <table style="border-collapse: collapse;" cellspacing="0" cellpadding="0">
     <tbody>

@@ -35,6 +35,7 @@ else
 git clone https://github.com/NyanSatan/iBoot32Patcher.git
 cd iBoot32Patcher
 clang iBoot32Patcher.c finders.c functions.c patchers.c -Wno-multichar -I. -o ../bin/iBoot32Patcher
+cd ../
 fi
 
 if [ -e "bin/partialZipBrowser" ]; then
