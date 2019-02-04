@@ -20,7 +20,7 @@ if [ $# == 4 ]; then
         exit
     fi
     if [ $4 = "--cs-disable" ]&&[ $4 = "--cs-disable-verbose" ]; then
-        echo "You need to get PE_i_can_has_debuger=1."
+        echo "You need to get PE_i_can_has_debugger=1."
     fi
 fi
 
