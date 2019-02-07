@@ -1,27 +1,35 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.1 make_ipsw.sh ****"
+echo "**** s0meiyoshino v3.2 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
-    echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [args]"
+    echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
     echo ""
     echo "[OPTION]"
-    echo "--verbose                 : Inject Boot-args \"-v\""
-    echo "--cs-disable              : Inject Boot-args \"cs_enforcement_disable=1\""
-    echo "--cs-disable-verbose      : Inject Boot-args \"cs_enforcement_disable=1 -v\""
+    echo "--verbose                 : [NoJB] Inject Boot-args \"-v\""
+    echo "--cs-disable              : [NoJB] Inject Boot-args \"cs_enforcement_disable=1\""
+    echo "--cs-disable-verbose      : [NoJB] Inject Boot-args \"cs_enforcement_disable=1 -v\""
+    echo "--jb                      : [JB] Jailbreak iOS (iPhone5,2 9.3.5 only) [BETA]"
     echo ""
-    echo "example: ./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose"
+    echo "[example]"
+    echo "./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose"
+    echo "./make_ipsw.sh iPhone5,2 9.3.5 7.0.4 --jb"
     exit
 fi
 
 if [ $# == 4 ]; then
-    if [ $4 != "--verbose" ] && [ $4 != "--cs-disable" ] && [ $4 != "--cs-disable-verbose" ]; then
+    if [ $4 != "--verbose" ] && [ $4 != "--cs-disable" ] && [ $4 != "--cs-disable-verbose" ] && [ $4 != "--jb" ]; then
         echo "[ERROR] Invalid argument"
         exit
     fi
     if [ $4 = "--cs-disable" ]&&[ $4 = "--cs-disable-verbose" ]; then
-        echo "You need to get PE_i_can_has_debugger=1."
+        echo "You need to get PE_i_can_has_debugger=1"
     fi
+fi
+
+if [ $# -gt 4 ]; then
+    echo "[ERROR] Too many arguments"
+    exit
 fi
 
 #### Set support device information ####
@@ -32,6 +40,7 @@ if [ $1 = "iPhone3,1" ]; then
     fi
     Identifier="iPhone3,1"
     InternalName="n90ap"
+    iBootInternalName="n90ap"
     SoC="s5l8930x"
     Image="2x~iphone-30pin"
     BaseFWVer="7.1.2"
@@ -43,6 +52,7 @@ if [ $1 = "iPhone5,2" ]; then
     if [ $3 = "7.0" ] || [ $3 = "7.0.2" ] || [ $3 = "7.0.3" ] || [ $3 = "7.0.4" ] || [ $3 = "7.0.6" ]; then
         Identifier="iPhone5,2"
         InternalName="n42ap"
+        iBootInternalName="n42ap"
         SoC="s5l8950x"
         Image="1136~iphone-lightning"
         Size="1136"
@@ -87,6 +97,13 @@ fi
 #### Set macOS version ####
 OSXVer=`sw_vers -productVersion | awk -F. '{print $2}'`
 DD=0
+JB=0
+disablekaslr=0
+sbops_patch=0
+iBoot9=0
+iBoot9_Partition_patch1="0"
+iBoot9_Partition_patch2="0"
+iBoot_KASLR="0"
 iOSLIST="0"
 
 #### iPhone 4 ####
@@ -330,8 +347,8 @@ if [ $Identifier = "iPhone5,2" ]; then
     fi
 
     if [ $2 = "7.1.2" ]; then
-        #### iOS 6.1.4 ####
-        ## iBoot-1537.9.55~11
+        #### iOS 7.1.2 ####
+        ## iBoot-1940.10.58~132
         iOSLIST="7"
         Boot_Partition_Patch="0000a7c: 00200020"
         Boot_Ramdisk_Patch="0000b24: 00200020"
@@ -341,14 +358,80 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_Key="b23dbe781086f6000cba372e5e8ae01c3f61c032ab1fb6729129707e3ccb9463"
         iBoot_IV="422b9c5e642ff797dc38b9910f084826"
         DD=1
-fi
+    fi
+
+    if [ $2 = "8.0.2" ]; then
+        #### iOS 8.0.2 ####
+        ## iBoot-2261.1.68~1
+        iOSLIST="7"
+        disablekaslr=1
+        sbops_patch=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000a60: 00200020"
+        Boot_Ramdisk_Patch="0000b16: 00200020"
+        iBEC_KASLR="001c5ff: E0" ## kaslr_patch_addr - ibec_base_addr (0xbff00000) + img3_header(0x40)
+        iOSVersion="8.0.2_12A405"
+        iOSBuild="12A405"
+        RestoreRamdisk="058-04628-039.dmg"
+        iBoot_Key="638c6637f20a85d04f7110a50759c79dd94a80e8eef95956c3b6f3dfe3ad353b"
+        iBoot_IV="b1dbd4dcb1dc0cc609f7c58073cd1900"
+        DD=1
+    fi
+
+    if [ $2 = "9.0.2" ]; then
+        #### iOS 9.0.2 ####
+        ## iBoot-2817.1.94~1
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch1="00013f0: 0433f4bf" ## 0xbff43304
+        iBoot9_Partition_Patch2="0043304: 3200" ## 2
+        iOSVersion="9.0.2_13A452"
+        iOSBuild="13A452"
+        RestoreRamdisk="058-03706-369.dmg"
+        iBoot_Key="b6a0fecaf54e3ebe46c670e74f92f053433f2b7b32d33453b5dbf75b3bdfe612"
+        iBoot_IV="23b4fc8e6f8b6aa20e8ab2380b3ee542"
+        DD=1
+    fi
+
+    if [ $2 = "9.3.5" ]; then
+        #### iOS 9.3.5 ####
+        ## iBoot-2817.60.2~2
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b1e: 00200020"
+        Boot_Ramdisk_Patch="0000c16: 00200020"
+        iBoot9_Partition_Patch1="0001400: 743af4bf"
+        iBoot9_Partition_Patch2="0043A74: 3200"
+        iBoot_KASLR="001a1fa: 00bf002100bf"
+        iOSVersion="9.3.5_13G36"
+        iOSBuild="13G36"
+        RestoreRamdisk="058-49199-036.dmg"
+        iBoot_Key="d958a3bfdf81fc24114183eec0c1a1e994723772129b5719efad04e504c06f08"
+        iBoot_IV="7d7d25b9f8d6d3ea15195f97f429e76e"
+        DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
+    fi
+
 fi
 
 if [ $DD == 0 ]; then
-echo "[ERROR] This downgrade-iOS is NOT supported!"
-exit
+    echo "[ERROR] This downgrade-iOS is NOT supported!"
+    exit
 fi
 
+if [ $4 = "--jb" ]&&[ $2 != "9.3.5" ]; then
+    echo "[ERROR] This version is NOT supported jailbreak!"
+    exit
+fi
 
 ### look ipsw??
 if [ -e ""$Identifier"_"$iOSVersion"_Restore.ipsw" ]; then
@@ -368,34 +451,34 @@ mkdir tmp_ipsw
 cd tmp_ipsw
 
 #### Decrypt iBoot ####
-unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3"
-../bin/xpwntool iBoot."$InternalName".RELEASE.img3 iBoot."$InternalName".dec.img3 -k $iBoot_Key -iv $iBoot_IV -decrypt
-../bin/xpwntool iBoot."$InternalName".dec.img3 iBoot."$InternalName".dec
+unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3"
+../bin/xpwntool iBoot."$iBootInternalName".RELEASE.img3 iBoot."$iBootInternalName".dec.img3 -k $iBoot_Key -iv $iBoot_IV -decrypt
+../bin/xpwntool iBoot."$iBootInternalName".dec.img3 iBoot."$iBootInternalName".dec
 echo ""
 
 if [ "$iOSLIST" = "4" ]; then
     #### iOS4Switch = 433 ####
     if [ "$iOS4Switch" = "433" ]; then
         #### Patching LLB4 ####
-        unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3"
-        ../bin/xpwntool LLB."$InternalName".RELEASE.img3 LLB."$InternalName".dec.img3 -k $LLB_Key -iv $LLB_IV -decrypt
-        ../bin/xpwntool LLB."$InternalName".dec.img3 LLB."$InternalName".dec
-        bspatch LLB."$InternalName".dec PwnedLLB."$InternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/LLB."$InternalName".RELEASE.patch
-        ../bin/xpwntool PwnedLLB."$InternalName".dec iBoot -t LLB."$InternalName".dec.img3
+        unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3"
+        ../bin/xpwntool LLB."$iBootInternalName".RELEASE.img3 LLB."$iBootInternalName".dec.img3 -k $LLB_Key -iv $LLB_IV -decrypt
+        ../bin/xpwntool LLB."$iBootInternalName".dec.img3 LLB."$iBootInternalName".dec
+        bspatch LLB."$iBootInternalName".dec PwnedLLB."$iBootInternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/LLB."$iBootInternalName".RELEASE.patch
+        ../bin/xpwntool PwnedLLB."$iBootInternalName".dec iBoot -t LLB."$iBootInternalName".dec.img3
         echo "0000010: 63656269" | xxd -r - iBoot
         echo "0000020: 63656269" | xxd -r - iBoot
         tar -cvf bootloader.tar iBoot
         #### Patching iBoot4 ####
-        bspatch iBoot."$InternalName".dec PwnediBoot."$InternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/iBoot."$InternalName".RELEASE.patch
-        ../bin/xpwntool PwnediBoot."$InternalName".dec iBoot4 -t iBoot."$InternalName".dec.img3
+        bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
+        ../bin/xpwntool PwnediBoot."$iBootInternalName".dec iBoot4 -t iBoot."$iBootInternalName".dec.img3
         echo "0000010: 346F6269" | xxd -r - iBoot4
         echo "0000020: 346F6269" | xxd -r - iBoot4
     fi
     #### iOS4Switch = 435 ####
     if [ "$iOS4Switch" = "435" ]; then
         #### Patching iBoot4 ####
-        bspatch iBoot."$InternalName".dec PwnediBoot."$InternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/iBoot."$InternalName".RELEASE.patch
-        ../bin/xpwntool PwnediBoot."$InternalName".dec iBoot -t iBoot."$InternalName".dec.img3
+        bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
+        ../bin/xpwntool PwnediBoot."$iBootInternalName".dec iBoot -t iBoot."$iBootInternalName".dec.img3
         echo "0000010: 63656269" | xxd -r - iBoot
         echo "0000020: 63656269" | xxd -r - iBoot
         tar -cvf bootloader.tar iBoot
@@ -406,35 +489,44 @@ fi
 if [ "$iOSLIST" != "4" ]; then
     #### Patching iBoot5/6/7 ####
     if [ $# -lt 4 ]; then
-        ../bin/iBoot32Patcher iBoot."$InternalName".dec PwnediBoot."$InternalName".dec -r -d
+        ../bin/iBoot32Patcher iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec -r -d
     fi
 
     if [ $# == 4 ]; then
         if [ $4 = "--verbose" ]; then
-            ../bin/iBoot32Patcher iBoot."$InternalName".dec PwnediBoot."$InternalName".dec -r -d -b "-v"
+            ../bin/iBoot32Patcher iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec -r -d -b "-v"
         fi
         if [ $4 = "--cs-disable" ]; then
-            ../bin/iBoot32Patcher iBoot."$InternalName".dec PwnediBoot."$InternalName".dec -r -d -b "cs_enforcement_disable=1"
+            ../bin/iBoot32Patcher iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec -r -d -b "cs_enforcement_disable=1"
         fi
         if [ $4 = "--cs-disable-verbose" ]; then
-            ../bin/iBoot32Patcher iBoot."$InternalName".dec PwnediBoot."$InternalName".dec -r -d -b "cs_enforcement_disable=1 -v"
+            ../bin/iBoot32Patcher iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec -r -d -b "cs_enforcement_disable=1 -v"
+        fi
+        if [ $4 = "--jb" ]; then
+            ../bin/iBoot32Patcher iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec -r -d -b "cs_enforcement_disable=1 amfi_get_out_of_my_way=1 -v"
+            echo "$iBoot_KASLR" | xxd -r - PwnediBoot."$iBootInternalName".dec
         fi
     fi
 
-    echo "$Boot_Partition_Patch" | xxd -r - PwnediBoot."$InternalName".dec
+    echo "$Boot_Partition_Patch" | xxd -r - PwnediBoot."$iBootInternalName".dec
     if [ $Identifier = "iPhone5,2" ]; then
-        echo "$Boot_Ramdisk_Patch" | xxd -r - PwnediBoot."$InternalName".dec
+        echo "$Boot_Ramdisk_Patch" | xxd -r - PwnediBoot."$iBootInternalName".dec
         if [ $iOSLIST = "6" ]; then
-            ../bin/iBoot32Patcher PwnediBoot."$InternalName".dec PwnediBoot2."$InternalName".dec -r
-            rm PwnediBoot."$InternalName".dec
-            mv PwnediBoot2."$InternalName".dec PwnediBoot."$InternalName".dec
+            ../bin/iBoot32Patcher PwnediBoot."$iBootInternalName".dec PwnediBoot2."$iBootInternalName".dec -r
+            rm PwnediBoot."$iBootInternalName".dec
+            mv PwnediBoot2."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec
+        fi
+
+        if [ $iBoot9 == 1 ]; then
+            echo "$iBoot9_Partition_Patch1" | xxd -r - PwnediBoot."$iBootInternalName".dec
+            echo "$iBoot9_Partition_Patch2" | xxd -r - PwnediBoot."$iBootInternalName".dec
         fi
     fi
 
-    ../bin/xpwntool PwnediBoot."$InternalName".dec PwnediBoot."$InternalName".img3 -t iBoot."$InternalName".dec.img3
-    echo "0000010: 63656269" | xxd -r - PwnediBoot."$InternalName".img3
-    echo "0000020: 63656269" | xxd -r - PwnediBoot."$InternalName".img3
-    mv -v PwnediBoot."$InternalName".img3 iBEC
+    ../bin/xpwntool PwnediBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".img3 -t iBoot."$iBootInternalName".dec.img3
+    echo "0000010: 63656269" | xxd -r - PwnediBoot."$iBootInternalName".img3
+    echo "0000020: 63656269" | xxd -r - PwnediBoot."$iBootInternalName".img3
+    mv -v PwnediBoot."$iBootInternalName".img3 iBEC
     tar -cvf bootloader.tar iBEC
 fi
 
@@ -443,12 +535,17 @@ cd ../
 if [ "$iOSLIST" = "4" ] && [ $Identifier = "iPhone3,1" ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory
 fi
+
 if [ "$iOSLIST" != "4" ] && [ $Identifier = "iPhone3,1" ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory tmp_ipsw/bootloader.tar
 fi
 
-if [ $Identifier = "iPhone5,2" ]; then
+if [ $Identifier = "iPhone5,2" ]&&[ $JB != 1 ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -bbupdate -memory tmp_ipsw/bootloader.tar
+fi
+
+if [ $Identifier = "iPhone5,2" ]&&[ $JB == 1 ]; then
+    ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -bbupdate -memory tmp_ipsw/bootloader.tar src/iPhone5,2/jb9/packages.tar
 fi
 
 #### Confirm existence of firmware ####
@@ -476,8 +573,8 @@ if [ "$iOSLIST" = "4" ]; then
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
 
@@ -496,7 +593,7 @@ if [ "$iOSLIST" = "4" ]; then
         echo "0000010: 58676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogoX-640x960."$SoC".img3
         echo "0000020: 58676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogoX-640x960."$SoC".img3
 
-        mv -v iBoot4 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot4."$InternalName".RELEASE.img3
+        mv -v iBoot4 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot4."$iBootInternalName".RELEASE.img3
 
         mv -v BaseFWBuild/applelogo@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo7-640x960."$SoC".img3
         mv -v BaseFWBuild/batterycharging0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
@@ -505,8 +602,8 @@ if [ "$iOSLIST" = "4" ]; then
         mv -v BaseFWBuild/batterylow0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
         mv -v BaseFWBuild/batterylow1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
         mv -v BaseFWBuild/glyphplugin@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
-        mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
-        mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+        mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+        mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
         mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
     fi
 
@@ -517,8 +614,8 @@ if [ "$iOSLIST" = "4" ]; then
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
 
@@ -540,8 +637,8 @@ if [ "$iOSLIST" = "4" ]; then
         mv -v BaseFWBuild/batterylow0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
         mv -v BaseFWBuild/batterylow1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
         mv -v BaseFWBuild/glyphplugin@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
-        mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
-        mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+        mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+        mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
         mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
     fi
 
@@ -555,8 +652,8 @@ if [ "$iOSLIST" = "6" ]; then
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0@2x."$SoC".img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1@2x."$SoC".img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin@2x."$SoC".img3
-    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
-    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@"$Size"~iphone."$SoC".img3
 
     mv -v BaseFWBuild/applelogo@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo@2x."$SoC".img3
@@ -566,8 +663,8 @@ if [ "$iOSLIST" = "6" ]; then
     mv -v BaseFWBuild/batterylow0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0@2x."$SoC".img3
     mv -v BaseFWBuild/batterylow1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1@2x."$SoC".img3
     mv -v BaseFWBuild/glyphplugin@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin@2x."$SoC".img3
-    mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
-    mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+    mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+    mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
     mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@"$Size"~iphone."$SoC".img3
 fi
 
@@ -579,8 +676,8 @@ if [ "$iOSLIST" = "7" ]; then
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0@2x~iphone."$SoC".img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1@2x~iphone."$SoC".img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin@"$Image"."$SoC".img3
-    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$InternalName".RELEASE.img3
-    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$InternalName".RELEASE.img3
+    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+    rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
     rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode@"$Image"."$SoC".img3
     mv -v BaseFWBuild/applelogo@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
     mv -v BaseFWBuild/batterycharging0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
@@ -589,33 +686,35 @@ if [ "$iOSLIST" = "7" ]; then
     mv -v BaseFWBuild/batterylow0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
     mv -v BaseFWBuild/batterylow1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
     mv -v BaseFWBuild/glyphplugin@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
-    mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
-    mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
+    mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
+    mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
     mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/
 fi
 
 if [ $Identifier = "iPhone5,2" ]; then
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:UniqueBuildID ../src/iPhone5,2/BB/UniqueBuildID" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-DownloadDigest ../src/iPhone5,2/BB/APPSDownloadDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-HashTableDigest ../src/iPhone5,2/BB/APPSHashTableDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP1-DownloadDigest ../src/iPhone5,2/BB/DSP1DownloadDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP1-HashTableDigest ../src/iPhone5,2/BB/DSP1HashTableDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP2-DownloadDigest ../src/iPhone5,2/BB/DSP2DownloadDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP2-HashTableDigest ../src/iPhone5,2/BB/DSP2HashTableDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP3-DownloadDigest ../src/iPhone5,2/BB/DSP3DownloadDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP3-HashTableDigest ../src/iPhone5,2/BB/DSP3HashTableDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:RPM-DownloadDigest ../src/iPhone5,2/BB/RPMDownloadDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:RestoreSBL1-PartialDigest ../src/iPhone5,2/BB/RestoreSBL1PartialDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:SBL1-PartialDigest ../src/iPhone5,2/BB/SBL1PartialDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:SBL2-DownloadDigest ../src/iPhone5,2/BB/SBL2DownloadDigest" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:RestoreSBL1-Version "-1559152312"" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:SBL1-Version "-1560200888"" $iOSBuild/BuildManifest.plist
-/usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:Info:Path "Firmware/Mav5-8.02.00.Release.bbfw"" $iOSBuild/BuildManifest.plist
+    ## BB=8.02.00 (8.4.1 full OTA)
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:UniqueBuildID ../src/iPhone5,2/BB/UniqueBuildID" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-DownloadDigest ../src/iPhone5,2/BB/APPSDownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-HashTableDigest ../src/iPhone5,2/BB/APPSHashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP1-DownloadDigest ../src/iPhone5,2/BB/DSP1DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP1-HashTableDigest ../src/iPhone5,2/BB/DSP1HashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP2-DownloadDigest ../src/iPhone5,2/BB/DSP2DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP2-HashTableDigest ../src/iPhone5,2/BB/DSP2HashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP3-DownloadDigest ../src/iPhone5,2/BB/DSP3DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP3-HashTableDigest ../src/iPhone5,2/BB/DSP3HashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:RPM-DownloadDigest ../src/iPhone5,2/BB/RPMDownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:RestoreSBL1-PartialDigest ../src/iPhone5,2/BB/RestoreSBL1PartialDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:SBL1-PartialDigest ../src/iPhone5,2/BB/SBL1PartialDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:SBL2-DownloadDigest ../src/iPhone5,2/BB/SBL2DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:RestoreSBL1-Version "-1559152312"" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:SBL1-Version "-1560200888"" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:Info:Path "Firmware/Mav5-8.02.00.Release.bbfw"" $iOSBuild/BuildManifest.plist
 
-cp -a -v ../src/iPhone5,2/BB/Mav5-8.02.00.Release.bbfw $iOSBuild/Firmware
-cp -a -v ../src/iPhone5,2/BB/Mav5-8.02.00.Release.plist $iOSBuild/Firmware
+    cp -a -v ../src/iPhone5,2/BB/Mav5-8.02.00.Release.bbfw $iOSBuild/Firmware
+    cp -a -v ../src/iPhone5,2/BB/Mav5-8.02.00.Release.plist $iOSBuild/Firmware
 fi
 
+### iPhone5,2_12H321_OTA ###
 #BuildIdentities:0:UniqueBuildID    ybHEo3Fv0y/6IYp0X45hxqDY7zM=
 
 #BuildIdentities:0:Manifest:BasebandFirmware:
@@ -635,6 +734,33 @@ fi
 #SBL2-DownloadDigest                LycXsLwawICZf2dMjev2yhZs+ic=
 #Info:Path                          Firmware/Mav5-8.02.00.Release.bbfw
 
+if [ $disablekaslr == 1 ]; then
+    echo $iBEC_KASLR | xxd -r - $iOSBuild/Firmware/dfu/iBEC.n42.RELEASE.dfu ## N42-iOS 8.0.2
+fi
+
+if [ $4 = "--jb" ]; then
+    ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/kernelcache.release.dec
+    ## kernelpacth by CBPatcher
+    bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
+    mv -v $iOSBuild/kernelcache.release.n42 $iOSBuild/kernelcache.release.n42_
+    ../bin/xpwntool $iOSBuild/pwnkernelcache.release.dec $iOSBuild/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42
+    rm $iOSBuild/Downgrade/kernelcache.release.n42
+    cp -a -v $iOSBuild/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42
+    rm $iOSBuild/kernelcache.release.n42_
+    rm $iOSBuild/pwnkernelcache.release.dec
+    rm $iOSBuild/kernelcache.release.dec
+fi
+
+if [ $sbops_patch == 1 ]; then
+    ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.dec
+    bspatch $iOSBuild/Downgrade/kernelcache.release.dec $iOSBuild/Downgrade/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/sbops.patch
+    mv -v $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42_
+    ../bin/xpwntool $iOSBuild/Downgrade/pwnkernelcache.release.dec $iOSBuild/Downgrade/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42_
+
+    rm $iOSBuild/Downgrade/kernelcache.release.n42_
+    rm $iOSBuild/Downgrade/pwnkernelcache.release.dec
+    rm $iOSBuild/Downgrade/kernelcache.release.dec
+fi
 
 #### make ramdisk ####
 ../bin/xpwntool $iOSBuild/$RestoreRamdisk $iOSBuild/ramdisk.dmg
@@ -676,7 +802,7 @@ if [ $Identifier = "iPhone5,2" ]; then
     mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
     cp -a -v ../src/iPhone5,2/partition.sh ramdisk/sbin/reboot
     cp -a -v ../src/iPhone5,2/11B554a/ramdiskH.dmg ramdisk/
-chmod 755 ramdisk/sbin/reboot
+    chmod 755 ramdisk/sbin/reboot
 fi
 
 if [ "$iOSLIST" = "7" ]; then
@@ -685,6 +811,14 @@ if [ "$iOSLIST" = "7" ]; then
 else
     mv -v ramdisk/usr/share/progressui/images-2x/applelogo.png ramdisk/usr/share/progressui/images-2x/applelogo_orig.png
     bspatch ramdisk/usr/share/progressui/images-2x/applelogo_orig.png ramdisk/usr/share/progressui/images-2x/applelogo.png ../patch/applelogo.patch
+fi
+
+if [ $4 = "--jb" ]; then
+    rm ramdisk/sbin/reboot
+    cp -a -v ../src/iPhone5,2/jb9/partition.sh ramdisk/sbin/reboot
+    mkdir ramdisk/jb
+    cp -a -v ../src/iPhone5,2/jb9/fstab ramdisk/jb
+    chmod 755 ramdisk/sbin/reboot
 fi
 
 sleep 1s

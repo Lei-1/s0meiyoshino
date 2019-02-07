@@ -1,217 +1,33 @@
-<h2>s0meiyoshino v3.1</h2>
-<p>It is a downgrade and untethered jailbreak tool to iOS 4.3.5, iOS 5.1.1, iOS 6 and iOS 7 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
+<h1>s0meiyoshino v3.2</h1>
+<p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5</p>
 <p>Please secure about 10 GB of free space.</p>
 <br/>
-<h3>Warning</h3>
+<h2>Warning</h2>
 <p>This tool enables exploit of iBoot.</p>
 <p>Therefore your device can be attacked from iBoot.</p>
 <p>If you have a blob, downgrade it using it is much safer.</p>
 <p>In the case of iPhone 4, it does not matter because it is already pwned by Bootrom vulnerability.</p>
 <br/>
-<h3>Supported version</h3>
-<table style="border-collapse: collapse;" cellspacing="0" cellpadding="0">
-    <tbody>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">iOS</p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>iPhone3,1</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>iPhone5,2</strong></span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>4.3.3</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">incomplete</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>4.3.5</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>5.1.1</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>6.0</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>6.0.1</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>6.1</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>6.1.2</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>6.1.3</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>6.1.4</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">--</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes (7.0-7.0.6 blobs)</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.0</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.0.2</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.0.3</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.0.4</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.0.6</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.1</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.1.1</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center"><strong>7.1.2</strong></span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">No</span></p>
-            </td>
-            <td>
-                <p style="margin: 0.0px 0.0px 0.0px 0.0px; text-align: center;" align="center">Yes</span></p>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<h2>Supported version</h2>
+<h3>iPhone 4 (iPhone3,1)</h3>
+<p>*Downgrade only</p>
+<p>iOS 4.3.3 (incomplete), 4.3.5</p>
+<p>iOS 5.1.1 (9B206)</p>
+<p>iOS 6.0 - 6.1.3</p>
+<p>iOS 7.0 - 7.1.1</p>
+<h3>iPhone 5 (iPhone5,2)</h3>
+<p>*Downgrade only</p>
+<p>iOS 6.1.4</p>
+<p>iOS 7.1.2</p>
+<p>iOS 8.0.2</p>
+<p>iOS 9.0.2</p>
+<p>*Downgrade and untethered jailbreak</p>
+<p>iOS 9.3.5</p>
+<p></p>
+<p>*problem</p>
+<p>Pangu 9 will not work. There is a problem with disable OTA Update. I will fix it soon.</p>
+<p></p>
 <p>The bundle is provided from <a href="https://github.com/dora2-iOS/xpwn/tree/master/ipsw-patch/FirmwareBundles">here</a>.</p>
 <br/>
 <h2>How to use</h2>
@@ -229,10 +45,9 @@
 <p>--verbose                 : Inject Boot-args "-v"</p>
 <p>--cs-disable              : Inject Boot-args "cs_enforcement_disable=1"</p>
 <p>--cs-disable-verbose      : Inject Boot-args "cs_enforcement_disable=1 -v"</p>
+<p>--jb                      : Jailbreak iOS (iPhone5,2 9.3.5 only) (BETA)</p>
 <p></p>
 <p>example: ./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose</p>
-<p>Firmware will be created.</p>
-<p>Since choices are displayed, please select as necessary.</p>
 <p></p>
 <h3>Restore (iPhone 4)</h3>
 <p>First, put in device "DFU mode".</p>
@@ -287,11 +102,11 @@
 <p>@danzatt for <a href="https://github.com/danzatt/ios-dualboot">ios-dualboot(hfs_resize etc.)</a></p>
 <p>Roderick W. Smith - for gptfdisk</p>
 <p>@iH8sn0w for <a href="https://github.com/iH8sn0w/iBoot32Patcher">iBoot32Patcher</a></p>
-<p>@tihmstar for <a href="https://github.com/tihmstar/iBoot32Patcher">Improvement of iBoot32Patcher</a></p>
+<p>@tihmstar for <a href="https://github.com/tihmstar/iBoot32Patcher">Improvement of iBoot32Patcher</a>, and partialZipBrowser</p>
 <p>@nyan_satan for <a href="https://github.com/NyanSatan/iBoot32Patcher">Improvement of iBoot32Patcher</a> and <a href="https://github.com/NyanSatan/TwistedMind2">TwistedMind2</a></p>
-<p>@ShadowLee19 for iBoot patch</p>
-<p>@JonathanSeals for many tips</p>
-<p>@Benfxmth for many tips</p>
+<p>@ShadowLee19 for bypass boot-partition and boot-ramdisk value iBoot patch</p>
+<p>@JonathanSeals for <a href="https://github.com/JonathanSeals/CBPatcher">CBPatcher</a>, disable kaslr patch, and many tips</p>
+<p>@Benfxmth for bypass reset boot-partition value iBoot patch, and many tips</p>
 <p>@winocm for opensn0w jailbreak patch</p>
 <p>@daytonhasty for <a href="https://dayt0n.com/articles/Odysseus/">Odysseus</a></p>
 <p>@libimobiledev for idevicerestore</p>
