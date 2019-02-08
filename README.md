@@ -12,7 +12,7 @@
 <h2>Supported version</h2>
 <h3>iPhone 4 (iPhone3,1)</h3>
 <p>*Downgrade only</p>
-<p>iOS 4.3.3 (incomplete), 4.3.5</p>
+<p>iOS 4.3.3 (incomplete), 4.3.5</p>
 <p>iOS 5.1.1 (9B206)</p>
 <p>iOS 6.0 - 6.1.3</p>
 <p>iOS 7.0 - 7.1.1</p>
