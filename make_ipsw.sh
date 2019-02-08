@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.2 make_ipsw ****"
+echo "**** s0meiyoshino v3.3 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -32,6 +32,8 @@ if [ $# -gt 4 ]; then
     exit
 fi
 
+Chip="0"
+
 #### Set support device information ####
 if [ $1 = "iPhone3,1" ]; then
     if [ $3 != "7.1.2" ]; then
@@ -46,6 +48,7 @@ if [ $1 = "iPhone3,1" ]; then
     BaseFWVer="7.1.2"
     BaseFWBuild="11D257"
     Size="2x"
+    Chip="A4"
 fi
 
 if [ $1 = "iPhone5,2" ]; then
@@ -56,6 +59,7 @@ if [ $1 = "iPhone5,2" ]; then
         SoC="s5l8950x"
         Image="1136~iphone-lightning"
         Size="1136"
+        Chip="A6"
         if [ $3 = "7.0" ]; then
             BaseFWVer="7.0"
             BaseFWBuild="11A465"
@@ -81,7 +85,42 @@ if [ $1 = "iPhone5,2" ]; then
     fi
 fi
 
-if [ $1 != "iPhone3,1" ] && [ $1 != "iPhone5,2" ]; then
+if [ $1 = "iPhone5,1" ]; then
+    if [ $3 = "7.0" ] || [ $3 = "7.0.2" ] || [ $3 = "7.0.3" ] || [ $3 = "7.0.4" ] || [ $3 = "7.0.6" ]; then
+        Identifier="iPhone5,1"
+        InternalName="n41ap"
+        iBootInternalName="n41ap"
+        SoC="s5l8950x"
+        Image="1136~iphone-lightning"
+        Size="1136"
+        Chip="A6"
+        if [ $3 = "7.0" ]; then
+            BaseFWVer="7.0"
+            BaseFWBuild="11A465"
+        fi
+        if [ $3 = "7.0.2" ]; then
+            BaseFWVer="7.0.2"
+            BaseFWBuild="11A501"
+        fi
+        if [ $3 = "7.0.3" ]; then
+            BaseFWVer="7.0.3"
+            BaseFWBuild="11B511"
+        fi
+        if [ $3 = "7.0.4" ]; then
+            BaseFWVer="7.0.4"
+            BaseFWBuild="11B554a"
+        fi
+        if [ $3 = "7.0.6" ]; then
+            BaseFWVer="7.0.6"
+            BaseFWBuild="11B651"
+        fi
+    else
+        echo "[ERROR] This base-iOS is NOT supported!"
+        exit
+    fi
+fi
+
+if [ $1 != "iPhone3,1" ] && [ $1 != "iPhone5,2" ] && [ $1 != "iPhone5,1" ]; then
     echo "[ERROR] This device is NOT supported!!"
     exit
 fi
@@ -423,12 +462,29 @@ if [ $Identifier = "iPhone5,2" ]; then
 
 fi
 
+#### iPhone 5 (GSM) [BETA] ####
+if [ $Identifier = "iPhone5,1" ]; then
+    if [ $2 = "6.1.4" ]; then
+        #### iOS 6.1.4 ####
+        ## iBoot-1537.9.55~11
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"
+        iOSVersion="6.1.4_10B350"
+        iOSBuild="10B350"
+        RestoreRamdisk="048-2930-001.dmg"
+        iBoot_Key="71605675477ca04856736b74d8c058e377efe1b0969c61af57a100634c35a4e3"
+        iBoot_IV="d2bddadd45899292efdd0f8349d9cec0"
+        DD=1
+    fi
+fi
+
 if [ $DD == 0 ]; then
     echo "[ERROR] This downgrade-iOS is NOT supported!"
     exit
 fi
 
-if [ $4 = "--jb" ]&&[ $2 != "9.3.5" ]; then
+if [ $4 = "--jb" ]&&[ $2 != "9.3.5" ]&&[ $Identifier = "iPhone5,2" ]; then
     echo "[ERROR] This version is NOT supported jailbreak!"
     exit
 fi
@@ -509,7 +565,7 @@ if [ "$iOSLIST" != "4" ]; then
     fi
 
     echo "$Boot_Partition_Patch" | xxd -r - PwnediBoot."$iBootInternalName".dec
-    if [ $Identifier = "iPhone5,2" ]; then
+    if [ $Chip = "A6" ]; then
         echo "$Boot_Ramdisk_Patch" | xxd -r - PwnediBoot."$iBootInternalName".dec
         if [ $iOSLIST = "6" ]; then
             ../bin/iBoot32Patcher PwnediBoot."$iBootInternalName".dec PwnediBoot2."$iBootInternalName".dec -r
@@ -540,12 +596,12 @@ if [ "$iOSLIST" != "4" ] && [ $Identifier = "iPhone3,1" ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory tmp_ipsw/bootloader.tar
 fi
 
-if [ $Identifier = "iPhone5,2" ]&&[ $JB != 1 ]; then
+if [ $Chip = "A6" ]&&[ $JB != 1 ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -bbupdate -memory tmp_ipsw/bootloader.tar
 fi
 
-if [ $Identifier = "iPhone5,2" ]&&[ $JB == 1 ]; then
-    ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -bbupdate -memory tmp_ipsw/bootloader.tar src/iPhone5,2/jb9/packages.tar
+if [ $Chip = "A6" ]&&[ $JB == 1 ]; then
+    ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -bbupdate -memory tmp_ipsw/bootloader.tar src/A6/jb9/packages.tar
 fi
 
 #### Confirm existence of firmware ####
@@ -692,7 +748,7 @@ if [ "$iOSLIST" = "7" ]; then
 fi
 
 if [ $Identifier = "iPhone5,2" ]; then
-    ## BB=8.02.00 (8.4.1 full OTA)
+    ## iPhone5,2 BB=8.02.00 (8.4.1 full OTA)
     /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:UniqueBuildID ../src/iPhone5,2/BB/UniqueBuildID" $iOSBuild/BuildManifest.plist
     /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-DownloadDigest ../src/iPhone5,2/BB/APPSDownloadDigest" $iOSBuild/BuildManifest.plist
     /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-HashTableDigest ../src/iPhone5,2/BB/APPSHashTableDigest" $iOSBuild/BuildManifest.plist
@@ -734,11 +790,35 @@ fi
 #SBL2-DownloadDigest                LycXsLwawICZf2dMjev2yhZs+ic=
 #Info:Path                          Firmware/Mav5-8.02.00.Release.bbfw
 
-if [ $disablekaslr == 1 ]; then
+if [ $Identifier = "iPhone5,1" ]; then
+    ## iPhone5,1 BB=8.02.00 (8.4.1 full OTA)
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:UniqueBuildID ../src/iPhone5,1/BB/UniqueBuildID" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-DownloadDigest ../src/iPhone5,1/BB/APPSDownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:APPS-HashTableDigest ../src/iPhone5,1/BB/APPSHashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP1-DownloadDigest ../src/iPhone5,1/BB/DSP1DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP1-HashTableDigest ../src/iPhone5,1/BB/DSP1HashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP2-DownloadDigest ../src/iPhone5,1/BB/DSP2DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP2-HashTableDigest ../src/iPhone5,1/BB/DSP2HashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP3-DownloadDigest ../src/iPhone5,1/BB/DSP3DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:DSP3-HashTableDigest ../src/iPhone5,1/BB/DSP3HashTableDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:RPM-DownloadDigest ../src/iPhone5,1/BB/RPMDownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:RestoreSBL1-PartialDigest ../src/iPhone5,1/BB/RestoreSBL1PartialDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:SBL1-PartialDigest ../src/iPhone5,1/BB/SBL1PartialDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "Import BuildIdentities:0:Manifest:BasebandFirmware:SBL2-DownloadDigest ../src/iPhone5,1/BB/SBL2DownloadDigest" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:RestoreSBL1-Version "-1559152312"" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:SBL1-Version "-1560200888"" $iOSBuild/BuildManifest.plist
+    /usr/libexec/PlistBuddy -c "set BuildIdentities:0:Manifest:BasebandFirmware:Info:Path "Firmware/Mav5-8.02.00.Release.bbfw"" $iOSBuild/BuildManifest.plist
+
+    cp -a -v ../src/iPhone5,1/BB/Mav5-8.02.00.Release.bbfw $iOSBuild/Firmware
+    cp -a -v ../src/iPhone5,1/BB/Mav5-8.02.00.Release.plist $iOSBuild/Firmware
+fi
+
+
+if [ $Identifier = "iPhone5,2" ]&&[ $disablekaslr == 1 ]; then
     echo $iBEC_KASLR | xxd -r - $iOSBuild/Firmware/dfu/iBEC.n42.RELEASE.dfu ## N42-iOS 8.0.2
 fi
 
-if [ $4 = "--jb" ]; then
+if [ $Identifier = "iPhone5,2" ]&&[ $4 = "--jb" ]; then
     ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/kernelcache.release.dec
     ## kernelpacth by CBPatcher
     bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
@@ -751,7 +831,7 @@ if [ $4 = "--jb" ]; then
     rm $iOSBuild/kernelcache.release.dec
 fi
 
-if [ $sbops_patch == 1 ]; then
+if [ $Identifier = "iPhone5,2" ]&&[ $sbops_patch == 1 ]; then
     ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.dec
     bspatch $iOSBuild/Downgrade/kernelcache.release.dec $iOSBuild/Downgrade/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/sbops.patch
     mv -v $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42_
@@ -798,10 +878,18 @@ if [ "$iOSLIST" != "4" ]&&[ $Identifier = "iPhone3,1" ]; then
 fi
 
 if [ $Identifier = "iPhone5,2" ]; then
-    tar -xvf ../src/iPhone5,2/bin.tar -C ramdisk/ --preserve-permissions
+    tar -xvf ../src/A6/bin.tar -C ramdisk/ --preserve-permissions
     mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
-    cp -a -v ../src/iPhone5,2/partition.sh ramdisk/sbin/reboot
+    cp -a -v ../src/A6/partition.sh ramdisk/sbin/reboot
     cp -a -v ../src/iPhone5,2/11B554a/ramdiskH.dmg ramdisk/
+    chmod 755 ramdisk/sbin/reboot
+fi
+
+if [ $Identifier = "iPhone5,1" ]; then
+    tar -xvf ../src/A6/bin.tar -C ramdisk/ --preserve-permissions
+    mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
+    cp -a -v ../src/A6/partition.sh ramdisk/sbin/reboot
+    cp -a -v ../src/iPhone5,1/11B554a/ramdiskH.dmg ramdisk/
     chmod 755 ramdisk/sbin/reboot
 fi
 
@@ -815,9 +903,9 @@ fi
 
 if [ $4 = "--jb" ]; then
     rm ramdisk/sbin/reboot
-    cp -a -v ../src/iPhone5,2/jb9/partition.sh ramdisk/sbin/reboot
+    cp -a -v ../src/A6/jb9/partition.sh ramdisk/sbin/reboot
     mkdir ramdisk/jb
-    cp -a -v ../src/iPhone5,2/jb9/fstab ramdisk/jb
+    cp -a -v ../src/A6/jb9/fstab ramdisk/jb
     chmod 755 ramdisk/sbin/reboot
 fi
 
