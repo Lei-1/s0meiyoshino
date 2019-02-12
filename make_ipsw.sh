@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.3 make_ipsw ****"
+echo "**** s0meiyoshino v3.3.1 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -140,6 +140,7 @@ JB=0
 disablekaslr=0
 sbops_patch=0
 iBoot9=0
+DeveloperBeta=0
 iBoot9_Partition_patch1="0"
 iBoot9_Partition_patch2="0"
 iBoot_KASLR="0"
@@ -371,6 +372,187 @@ fi
 
 #### iPhone 5 (Global) ####
 if [ $Identifier = "iPhone5,2" ]; then
+
+    if [ $2 = "6.0" ]; then
+        #### iOS 6.0 ####
+        ## iBoot-1537.4.19
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"
+        iOSVersion="6.0_10A405"
+        iOSBuild="10A405"
+        RestoreRamdisk="038-6463-002.dmg"
+        iBoot_Key="2b755c7222f27d0e3e84f10d19eb98a8dc8d2d05f4be67d3f31bec1a5b8f9bb3"
+        iBoot_IV="87ac80843ec14b0340170729a3232f42"
+        DD=1
+    fi
+
+    if [ $2 = "6.0.1" ]; then
+        #### iOS 6.0.1 ####
+        ## iBoot-1537.4.21
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"
+        iOSVersion="6.0.1_10A525"
+        iOSBuild="10A525"
+        RestoreRamdisk="038-8911-002.dmg"
+        iBoot_Key="ecd996bf7b7ec5bbdfc2f664bf404d17b981cdc74eae9d149c0d59fb9a463de7"
+        iBoot_IV="b2a8a5d0b3f93b22b98913fc1d2dfcf2"
+        DD=1
+    fi
+
+    if [ $2 = "6.0.2" ]; then
+        #### iOS 6.0.2 ####
+        ## iBoot-1537.4.21
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"
+        iOSVersion="6.0.2_10A551"
+        iOSBuild="10A551"
+        RestoreRamdisk="038-9066-004.dmg"
+        iBoot_Key="ecd996bf7b7ec5bbdfc2f664bf404d17b981cdc74eae9d149c0d59fb9a463de7"
+        iBoot_IV="b2a8a5d0b3f93b22b98913fc1d2dfcf2"
+        DD=1
+    fi
+
+    if [ $2 = "6.1_beta_1" ]; then
+        #### iOS 6.1 beta (BrightonVail 10B5095f) ####
+        #### This version is beta version         ####
+        #### You need to create a bundle yourself ####
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020" #* unconfirmed *#
+        Boot_Ramdisk_Patch="0000b66: 00200020"   #* unconfirmed *#
+        iOSVersion="6.1_10B5095f"
+        iOSBuild="10B5095f"
+        RestoreRamdisk="038-8932-002.dmg"
+        iBoot_Key="f6ca49203e6e23125b23296517235f2f85c123837be95c2a63cdca3f320b9633"
+        iBoot_IV="6100088f2d4baa683b0998b373b297d7"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "6.1_beta_2" ]; then
+        #### iOS 6.1 beta 2 (BrightonVail 10B5105c) ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020" #* unconfirmed *#
+        Boot_Ramdisk_Patch="0000b66: 00200020"   #* unconfirmed *#
+        iOSVersion="6.1_10B5105c"
+        iOSBuild="10B5105c"
+        RestoreRamdisk="038-8999-003.dmg"
+        iBoot_Key="22d5f5189a1a5a941b033b7e6bd459a108a1b0c776fc6da4e8c44d406f96ba68"
+        iBoot_IV="6d0044577727bdd4f6679ed06f671786"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "6.1_beta_3" ]; then
+        #### iOS 6.1 beta 3 (BrightonVail 10B5117b) ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020" #* unconfirmed *#
+        Boot_Ramdisk_Patch="0000b66: 00200020"   #* unconfirmed *#
+        iOSVersion="6.1_10B5117b"
+        iOSBuild="10B5117b"
+        RestoreRamdisk="038-9284-002.dmg"
+        iBoot_Key="9ada3893825a6d805fbb9a66f611cd8c4d34b19c0c009e101cfe3840f7907793"
+        iBoot_IV="b13797c3777a14b7fe5233fef4af293c"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "6.1_beta_4" ]; then
+        #### iOS 6.1 beta 4 (BrightonVail 10B5126b) ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020" #* unconfirmed *#
+        Boot_Ramdisk_Patch="0000b66: 00200020"   #* unconfirmed *#
+        iOSVersion="6.1_10B5126b"
+        iOSBuild="10B5126b"
+        RestoreRamdisk="038-9602-003.dmg"
+        iBoot_Key="fb92adba9c6de6b37a4f1130868447ce24eeaa5ef0f9ad4ace13b22f09fc0e45"
+        iBoot_IV="31520eab4a17cb041f5724ad09d3122b"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "6.1" ]; then
+        #### iOS 6.1 ####
+        ## iBoot-1537.9.55
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"
+        iOSVersion="6.1_10B143"
+        iOSBuild="10B143"
+        RestoreRamdisk="048-0729-001.dmg"
+        iBoot_Key="146435916d345fff78ffd2972f0277194cc8cfe512c1d7d8eabc3526a3c75478"
+        iBoot_IV="af5ef5fb6b37a5327e7a5f92dc4b1473"
+        DD=1
+    fi
+
+    if [ $2 = "6.1.1_beta" ]; then
+        #### iOS 6.1.1 beta (BrightonMaps 10B311) ####
+        #### This version is beta version         ####
+        #### You need to create a bundle yourself ####
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020" #* unconfirmed *#
+        Boot_Ramdisk_Patch="0000b66: 00200020"   #* unconfirmed *#
+        iOSVersion="6.1.1_10B311"
+        iOSBuild="10B311"
+        RestoreRamdisk="048-0386-012.dmg"
+        iBoot_Key="346b76e7b5b2e4200467d8ffe499f671e4dc84440b3fecc21607931f74de446b"
+        iBoot_IV="eda2282a528798ba838017567a102dfb"
+        DeveloperBeta=1
+    fi
+
+
+    if [ $2 = "6.1.2" ]; then
+        #### iOS 6.1.2 ####
+        ## iBoot-1537.9.55
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"
+        iOSVersion="6.1.2_10B146"
+        iOSBuild="10B146"
+        RestoreRamdisk="048-0856-002.dmg"
+        iBoot_Key="77b211f89344b83d330586690c972142d420cfd6f9b562b7bd7c087a5ab8e79c"
+        iBoot_IV="2d9b731bede6196f54d01cb821a4aa70"
+        DD=1
+    fi
+
+    if [ $2 = "6.1.3_beta_2" ]; then
+        #### iOS 6.1.3 beta 2 (BrightonMaps 10B318) ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020" #* unconfirmed *#
+        Boot_Ramdisk_Patch="0000b66: 00200020"   #* unconfirmed *#
+        iOSVersion="6.1.3_10B311"
+        iOSBuild="10B311"
+        RestoreRamdisk="048-0987-008.dmg"
+        iBoot_Key="f0943a042103e899250e62043ce8a7d24a446eac77366fcdc12cd21a28828af9"
+        iBoot_IV="c13c3705190682c2d4253ecea7910c56"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "6.1.3" ]; then
+        #### You need to create a bundle yourself   ####
+        iOSLIST="6"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"
+        iOSVersion="6.1.3_10B329"
+        iOSBuild="10B329"
+        RestoreRamdisk="048-2548-005.dmg"
+        iBoot_Key="f0943a042103e899250e62043ce8a7d24a446eac77366fcdc12cd21a28828af9"
+        iBoot_IV="c13c3705190682c2d4253ecea7910c56"
+        if [ -d "FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle" ]; then
+            DD=1
+        else
+            echo "[ERROR] Firmwarebundle was not found."
+            echo "[ERROR] You need to create a bundle yourself."
+        fi
+    fi
+
+
     if [ $2 = "6.1.4" ]; then
         #### iOS 6.1.4 ####
         ## iBoot-1537.9.55~11
@@ -479,14 +661,26 @@ if [ $Identifier = "iPhone5,1" ]; then
     fi
 fi
 
+if [ $DeveloperBeta == 1 ]; then
+    if [ -d "FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle" ]; then
+        DD=1
+    else
+        echo "[ERROR] Firmwarebundle was not found."
+        echo "[ERROR] You need to create a bundle yourself."
+    fi
+
+fi
+
 if [ $DD == 0 ]; then
     echo "[ERROR] This downgrade-iOS is NOT supported!"
     exit
 fi
 
-if [ $4 = "--jb" ]&&[ $2 != "9.3.5" ]&&[ $Identifier = "iPhone5,2" ]; then
-    echo "[ERROR] This version is NOT supported jailbreak!"
-    exit
+if [ $# == 4 ]; then
+    if [ $4 = "--jb" ]&&[ $2 != "9.3.5" ]&&[ $Identifier = "iPhone5,2" ]; then
+        echo "[ERROR] This version is NOT supported jailbreak!"
+        exit
+    fi
 fi
 
 ### look ipsw??
@@ -818,17 +1012,19 @@ if [ $Identifier = "iPhone5,2" ]&&[ $disablekaslr == 1 ]; then
     echo $iBEC_KASLR | xxd -r - $iOSBuild/Firmware/dfu/iBEC.n42.RELEASE.dfu ## N42-iOS 8.0.2
 fi
 
-if [ $Identifier = "iPhone5,2" ]&&[ $4 = "--jb" ]; then
-    ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/kernelcache.release.dec
-    ## kernelpacth by CBPatcher
-    bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
-    mv -v $iOSBuild/kernelcache.release.n42 $iOSBuild/kernelcache.release.n42_
-    ../bin/xpwntool $iOSBuild/pwnkernelcache.release.dec $iOSBuild/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42
-    rm $iOSBuild/Downgrade/kernelcache.release.n42
-    cp -a -v $iOSBuild/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42
-    rm $iOSBuild/kernelcache.release.n42_
-    rm $iOSBuild/pwnkernelcache.release.dec
-    rm $iOSBuild/kernelcache.release.dec
+if [ $# == 4 ]; then
+    if [ $Identifier = "iPhone5,2" ]&&[ $4 = "--jb" ]; then
+        ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/kernelcache.release.dec
+        ## kernelpacth by CBPatcher
+        bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
+        mv -v $iOSBuild/kernelcache.release.n42 $iOSBuild/kernelcache.release.n42_
+        ../bin/xpwntool $iOSBuild/pwnkernelcache.release.dec $iOSBuild/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42
+        rm $iOSBuild/Downgrade/kernelcache.release.n42
+        cp -a -v $iOSBuild/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42
+        rm $iOSBuild/kernelcache.release.n42_
+        rm $iOSBuild/pwnkernelcache.release.dec
+        rm $iOSBuild/kernelcache.release.dec
+    fi
 fi
 
 if [ $Identifier = "iPhone5,2" ]&&[ $sbops_patch == 1 ]; then
@@ -901,12 +1097,14 @@ else
     bspatch ramdisk/usr/share/progressui/images-2x/applelogo_orig.png ramdisk/usr/share/progressui/images-2x/applelogo.png ../patch/applelogo.patch
 fi
 
-if [ $4 = "--jb" ]; then
-    rm ramdisk/sbin/reboot
-    cp -a -v ../src/A6/jb9/partition.sh ramdisk/sbin/reboot
-    mkdir ramdisk/jb
-    cp -a -v ../src/A6/jb9/fstab ramdisk/jb
-    chmod 755 ramdisk/sbin/reboot
+if [ $# == 4 ]; then
+    if [ $4 = "--jb" ]; then
+        rm ramdisk/sbin/reboot
+        cp -a -v ../src/A6/jb9/partition.sh ramdisk/sbin/reboot
+        mkdir ramdisk/jb
+        cp -a -v ../src/A6/jb9/fstab ramdisk/jb
+        chmod 755 ramdisk/sbin/reboot
+    fi
 fi
 
 sleep 1s

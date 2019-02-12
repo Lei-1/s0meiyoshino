@@ -1,4 +1,4 @@
-<h1>s0meiyoshino v3.3</h1>
+<h1>s0meiyoshino v3.3.1</h1>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5. It may not work in 10.14. Please downgrade to High Sierra.</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -16,34 +16,38 @@
 <p>iOS 5.1.1 (9B206)</p>
 <p>iOS 6.0 - 6.1.3</p>
 <p>iOS 7.0 - 7.1.1</p>
-<p></p>
+<br/>
 <h3>iPhone 5 (iPhone5,2)</h3>
 <p>*Downgrade only</p>
+<p>iOS 6.0</p>
+<p>iOS 6.0.1</p>
+<p>iOS 6.0.2</p>
+<p>iOS 6.1</p>
+<p>iOS 6.1.2</p>
 <p>iOS 6.1.4</p>
 <p>iOS 7.1.2</p>
 <p>iOS 8.0.2</p>
 <p>iOS 9.0.2</p>
 <p>*Downgrade and untethered jailbreak</p>
 <p>iOS 9.3.5</p>
-<p></p>
+<br/>
 <h3>iPhone 5 (iPhone5,1)</h3>
 <p>*Downgrade only</p>
 <p>iOS 6.1.4 (untest)</p>
-<p></p>
 <br/>
 <p>*problem</p>
 <p>Pangu 9 will not work. There is a problem with disable OTA Update. I will fix it soon.</p>
-<p></p>
+<br/>
 <p>The bundle is provided from <a href="https://github.com/dora2-iOS/xpwn/tree/master/ipsw-patch/FirmwareBundles">here</a>.</p>
 <br/>
 <h2>How to use</h2>
 <h3>Download IPSW</h3>
 <a href="https://ipsw.me">ipsw download (https://ipsw.me)</a><br/>
 <p>Prepare put it firmware (base-ipsw, downgrade-ver-ipsw) in s0meiyoshino.<br/></p>
-<p></p>
+<br/>
 <h3>Install packages</h3>
 ./install.sh<br/>
-<p></p>
+<br/>
 <h3>make ipsw</h3>
 <p>./make_ipsw.sh [device model] [downgrade-iOS] [base-iOS] [args]<br/>
 <p></p>
@@ -54,12 +58,12 @@
 <p>--jb                      : Jailbreak iOS (iPhone5,2 9.3.5 only) (BETA)</p>
 <p></p>
 <p>example: ./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose</p>
-<p></p>
+<br/>
 <h3>Restore (iPhone 4)</h3>
 <p>First, put in device "DFU mode".</p>
 <p>Then, execute the following.</p>
 <p>./restore4.sh</p>
-<p></p>
+<br/>
 <h3>Restore (iPhone 5)</h3>
 <p>First, put shsh of 7.0.x in the shsh/ directory.</p>
 <p>And, change shsh file name. If you want to downgrade to 6.1.4, it will be as follows.</p>
@@ -68,7 +72,7 @@
 <p>Next, put in device "kDFU mode" or "Pwned recovery mode".</p>
 <p>Then, execute the following.</p>
 <p>bin/idevicerestore -e -w [CUSTOM_IPSW]</p>
-<p></p>
+<br/>
 <h2>How to delete exploit (iPhone 4)</h2>
 <p>This method adds "boot-partition=2" to the nvram variable.</p>
 <p>Even if you restore it with OFW in iTunes, it will be in recovery mode as it is.</p>
@@ -87,7 +91,7 @@
 <p>(2) Jailbreak and tethered boot by redsn0w</p>
 <p>(3) exec command "nvram -d boot-partition"</p>
 <p>(4) reboot and restore</p>
-<p></p>
+<br/>
 <h2>How to delete exploit (iPhone 5)</h2>
 <p>This method adds "boot-partition", and "boot-ramdisk" to the nvram variable.</p>
 <p>However, since iOS 9 and later ignore this, if you want to restore it, do as follows.</p>
@@ -96,13 +100,13 @@
 <p>(3) Execution command "nvram -d boot-partition"</p>
 <p>(4) Execution command "nvram -d boot-ramdisk"</p>
 <p>(5) Reboot</p>
-<p></p>
+<br/>
 <h2>How to jailbreak iOS 4.3.5</h2>
 <p>(1) Tethered Jailbreak by redsn0w.</p>
 <p>(2) Tethered Boot by redsn0w.</p>
 <p>(3) Replace kernelcache with pwnedkc of redsn0w.</p>
 <p>(4) Reboot!</p>
-<p></p>
+<br/>
 <h2>Credit</h2>
 <p>@xerub for <a href="https://xerub.github.io/ios/iboot/2018/05/10/de-rebus-antiquis.html">De Rebus Antiquis</a></p>
 <p>@danzatt for <a href="https://github.com/danzatt/ios-dualboot">ios-dualboot(hfs_resize etc.)</a></p>
