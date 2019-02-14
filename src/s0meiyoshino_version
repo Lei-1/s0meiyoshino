@@ -61,4 +61,8 @@ v3.3 - Add support for iPhone5,1 (untest)
 
 v3.3.1 - add 6.0-6.1.2 for iPhone5,2
      committed Feb 13, 2019
-** v3.1に加えてiPhone5,2のiOS 6.0-6.0.2をサポート。
+** v3.3に加えてiPhone5,2のiOS 6.0-6.0.2をサポート。
+
+v3.3.2 - add 7.x for iPhone5,2
+     committed Feb 15, 2019
+** v3.3.1に加えてiPhone5,2のiOS 7.xをサポート。

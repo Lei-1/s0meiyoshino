@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.3.1 make_ipsw ****"
+echo "**** s0meiyoshino v3.3.2 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -435,8 +435,8 @@ if [ $Identifier = "iPhone5,2" ]; then
         #### This version is beta version           ####
         #### You need to create a bundle yourself   ####
         iOSLIST="6"
-        Boot_Partition_Patch="0000a94: 00200020" #* unconfirmed *#
-        Boot_Ramdisk_Patch="0000b66: 00200020"   #* unconfirmed *#
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b66: 00200020"   
         iOSVersion="6.1_10B5105c"
         iOSBuild="10B5105c"
         RestoreRamdisk="038-8999-003.dmg"
@@ -564,6 +564,282 @@ if [ $Identifier = "iPhone5,2" ]; then
         RestoreRamdisk="048-2930-001.dmg"
         iBoot_Key="f0943a042103e899250e62043ce8a7d24a446eac77366fcdc12cd21a28828af9"
         iBoot_IV="c13c3705190682c2d4253ecea7910c56"
+        DD=1
+    fi
+
+    if [ $2 = "7.0_beta" ]; then
+        #### iOS 7.0 beta (InnsbruckVailPrime 11A4372q) ####
+        #### This version is beta version               ####
+        #### You need to create a bundle yourself       ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a94: 00200020"
+        Boot_Ramdisk_Patch="0000b34: 00200020"
+        iOSVersion="7.0_11A4372q"
+        iOSBuild="11A4372q"
+        RestoreRamdisk="048-3678-029.dmg"
+        iBoot_Key="985bc1f5827c541a0937eeb2b336bbec1988d2583024a8cd99e3e838b71c40a1"
+        iBoot_IV="0a4fe3b14bd6d73e1d8cf5d77e91d4a0"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.0_beta_2" ]; then
+        #### iOS 7.0 beta 2 (InnsbruckVailPrime 11A4400f)   ####
+        #### This version is beta version                   ####
+        #### You need to create a bundle yourself           ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b34: 00200020"
+        iOSVersion="7.0_11A4400f"
+        iOSBuild="11A4400f"
+        RestoreRamdisk="048-6332-010.dmg"
+        iBoot_Key="2eca7f9f3c553b8a6ad092c071bcc122b9bcfc81ff6e8c68c737396bea1c58e4"
+        iBoot_IV="43b47e54aa5d7e6e9df8a36f2e111e35"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.0_beta_3" ]; then
+        #### iOS 7.0 beta 3 (InnsbruckVailPrime 11A4414e)   ####
+        #### This version is beta version                   ####
+        #### You need to create a bundle yourself           ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0_11A4414e"
+        iOSBuild="11A4414e"
+        RestoreRamdisk="048-7288-001.dmg"
+        iBoot_Key="b56b939b94e6797a32f76ad25e4e1eced1ff63f65c081f85bcd92cd43f590fa6"
+        iBoot_IV="baa175db8a1988de27270f5cc994db5c"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.0_beta_4" ]; then
+        #### iOS 7.0 beta 4 (InnsbruckVailPrime 11A4435d)   ####
+        #### This version is beta version                   ####
+        #### You need to create a bundle yourself           ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0_11A4435d"
+        iOSBuild="11A4435d"
+        RestoreRamdisk="048-7355-008.dmg"
+        iBoot_Key="fee04ddd5ccb82c2d22134ccbc5b694cead6a88d4d93314b7e57aace89ffdb6a"
+        iBoot_IV="02ac090e2eafd2e4080a9f6312719ee0"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.0_beta_5" ]; then
+        #### iOS 7.0 beta 5 (InnsbruckVailPrime 11A4449a)   ####
+        #### This version is beta version                   ####
+        #### You need to create a bundle yourself           ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0_11A4449a"
+        iOSBuild="11A4449a"
+        RestoreRamdisk="048-7747-009.dmg"
+        iBoot_Key="068b9890c1d08f104b575b528eb83f574306e91445b54c89b623fc2708200ee3"
+        iBoot_IV="d086a37e609fedaf1b853c461cc59d79"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.0_beta_6" ]; then
+        #### iOS 7.0 beta 6 (InnsbruckVailPrime 11A4449d)   ####
+        #### This version is beta version                   ####
+        #### You need to create a bundle yourself           ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0_11A4449d"
+        iOSBuild="11A4449d"
+        RestoreRamdisk="048-7885-001.dmg"
+        iBoot_Key="068b9890c1d08f104b575b528eb83f574306e91445b54c89b623fc2708200ee3"
+        iBoot_IV="d086a37e609fedaf1b853c461cc59d79"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.0" ]; then
+        #### iOS 7.0 ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0_11A465"
+        iOSBuild="11A465"
+        RestoreRamdisk="038-3474-250.dmg"
+        iBoot_Key="2a60116e0f4c6ef3f7773f2f32ae045c665acad5956f285da035b9f34b794e85"
+        iBoot_IV="eafb2c963f6d05cc40b1146abd2e7856"
+        DD=1
+    fi
+
+    if [ $2 = "7.0.2" ]; then
+        #### iOS 7.0.2 ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0.2_11A501"
+        iOSBuild="11A501"
+        RestoreRamdisk="048-9014-002.dmg"
+        iBoot_Key="eeac299d3c9ec73b04aa6dd16aea599fa88b486032a33cc58b44db7d6ee415de"
+        iBoot_IV="4ce21efa022a581bb7db2d4b791b8af3"
+        DD=1
+    fi
+
+    if [ $2 = "7.0.3" ]; then
+        #### iOS 7.0.3 ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0.3_11B511"
+        iOSBuild="11B511"
+        RestoreRamdisk="058-0174-001.dmg"
+        iBoot_Key="75f78b0857a98c33e1a728a88c9a738fe3cf2f188baffd12236fa4832db95390"
+        iBoot_IV="8f66deb83d46d65c5df4d8ff13ef5614"
+        DD=1
+    fi
+
+    if [ $2 = "7.0.4_technical_leak" ]; then
+        #### iOS 7.0.4 InnsbruckTaos 11B553           ####
+        #### it was discovered from a technical leak. ####
+        #### You need to create a bundle yourself     ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0.4_11B553"
+        iOSBuild="11B553"
+        RestoreRamdisk="058-0403-004.dmg"
+        iBoot_Key="d2c7dbef4dc6e878869f9cee6d9eb479a5811a1a7d3d5e81daa0b2fcfe6909e4"
+        iBoot_IV="b3a9e437802f5aed6b73b6d738b18275"
+        if [ -d "FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle" ]; then
+            DD=1
+        else
+            echo "[ERROR] Firmwarebundle was not found."
+            echo "[ERROR] You need to create a bundle yourself."
+        fi
+    fi
+
+    if [ $2 = "7.0.4" ]; then
+        #### iOS 7.0.4 ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0.4_11B554a"
+        iOSBuild="11B554a"
+        RestoreRamdisk="058-1089-002.dmg"
+        iBoot_Key="d2c7dbef4dc6e878869f9cee6d9eb479a5811a1a7d3d5e81daa0b2fcfe6909e4"
+        iBoot_IV="b3a9e437802f5aed6b73b6d738b18275"
+        DD=1
+    fi
+
+    if [ $2 = "7.0.6" ]; then
+        #### iOS 7.0.6 ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.0.6_11B651"
+        iOSBuild="11B651"
+        RestoreRamdisk="058-3121-001.dmg"
+        iBoot_Key="be934f7bc2b1837ab061a8b4356b41622a80878c8ed8152a5fb741e488b63dc1"
+        iBoot_IV="62da3218997c76cb75e83754df8b7639"
+        DD=1
+    fi
+
+    if [ $2 = "7.1_beta" ]; then
+        #### iOS 7.1 beta (SochiVail 11D5099e)     ####
+        #### This version is beta version          ####
+        #### You need to create a bundle yourself  ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020" #* unconfirmed *#
+        Boot_Ramdisk_Patch="0000b24: 00200020"   #* unconfirmed *#
+        iOSVersion="7.1_11D5099e"
+        iOSBuild="11D5099e"
+        RestoreRamdisk="058-1030-007.dmg"
+        iBoot_Key="c101a5c6e2aafa124f26840732274bcf292d22a60058caa6c6ad338c55e52708"
+        iBoot_IV="278c761fb58c01f9db1c3edef19af62f"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.1_beta_2" ]; then
+        #### iOS 7.1 beta 2 (SochiVail 11D5115d)   ####
+        #### This version is beta version          ####
+        #### You need to create a bundle yourself  ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.1_11D5115d"
+        iOSBuild="11D5115d"
+        RestoreRamdisk="058-1620-005.dmg"
+        iBoot_Key="742d36c42fc4fd86ec279a8ec67b451e2025af6188ca8ffbf7ddcdd10d7e349e"
+        iBoot_IV="357fa0d3c049473019800db09f0e4d62"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.1_beta_3" ]; then
+        #### iOS 7.1 beta 3 (SochiVail 11D5127c)   ####
+        #### This version is beta version          ####
+        #### You need to create a bundle yourself  ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.1_11D5127c"
+        iOSBuild="11D5127c"
+        RestoreRamdisk="058-1953-004.dmg"
+        iBoot_Key="6af81ebdfbaa046566cafe4a301e4c2f2c56e47fab327bdeb13dd3d44d17c2b4"
+        iBoot_IV="9fc3ed515a7c10a36709c09d0794de54"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.1_beta_4" ]; then
+        #### iOS 7.1 beta 4 (SochiVail 11D5134c)   ####
+        #### This version is beta version          ####
+        #### You need to create a bundle yourself  ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.1_11D5134c"
+        iOSBuild="11D5134c"
+        RestoreRamdisk="058-2055-004.dmg"
+        iBoot_Key="4e54b1a396f598791ed4392968edf8ef5388cf963cf3ada2177a7c5cd0cd3609"
+        iBoot_IV="0b55f5292924478d5b23c763672044e3"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.1_beta_5" ]; then
+        #### iOS 7.1 beta 5 (SochiVail 11D5145e)   ####
+        #### This version is beta version          ####
+        #### You need to create a bundle yourself  ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.1_11D5145e"
+        iOSBuild="11D5145e"
+        RestoreRamdisk="058-2445-007.dmg"
+        iBoot_Key="2e82aa5e367611b59ea80acf1a2e7168b60b0774a29e297ea18f8236697f2711"
+        iBoot_IV="d51a959a1971238bf3a0c20e4805315a"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "7.1" ]; then
+        #### iOS 7.1 ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.1_11D167"
+        iOSBuild="11D167"
+        RestoreRamdisk="058-4276-001.dmg"
+        iBoot_Key="cb43628b21c5e466d311bc494371d0809c82add85e30e1c39336aa7252889627"
+        iBoot_IV="48603d58be5e9f04d405a93ad0b2e313"
+        DD=1
+    fi
+
+    if [ $2 = "7.1.1" ]; then
+        #### iOS 7.1.1 ####
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a7c: 00200020"
+        Boot_Ramdisk_Patch="0000b24: 00200020"
+        iOSVersion="7.1.1_11D201"
+        iOSBuild="11D201"
+        RestoreRamdisk="058-00219-002.dmg"
+        iBoot_Key="af601e09c5a1374d3a5e601c772b350ee87539b1a8a9929abf5df08c76e73616"
+        iBoot_IV="ae9035bbbc18a942fcfda4cdef24af8c"
         DD=1
     fi
 

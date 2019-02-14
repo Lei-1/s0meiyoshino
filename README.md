@@ -1,4 +1,4 @@
-<h1>s0meiyoshino v3.3.1</h1>
+<h1>s0meiyoshino v3.3.2</h1>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5. It may not work in 10.14. Please downgrade to High Sierra.</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -18,14 +18,13 @@
 <p>iOS 7.0 - 7.1.1</p>
 <br/>
 <h3>iPhone 5 (iPhone5,2)</h3>
+<p>For iPhone 5, SHSH of either iOS 7.0 - 7.0.6 is required.</p>
+<p>But, downgrade target SHSH is unnecessary!</p>
+<br/>
 <p>*Downgrade only</p>
-<p>iOS 6.0</p>
-<p>iOS 6.0.1</p>
-<p>iOS 6.0.2</p>
-<p>iOS 6.1</p>
-<p>iOS 6.1.2</p>
+<p>iOS 6.0 - 6.1.2</p>
 <p>iOS 6.1.4</p>
-<p>iOS 7.1.2</p>
+<p>iOS 7.0 - 7.1.2</p>
 <p>iOS 8.0.2</p>
 <p>iOS 9.0.2</p>
 <p>*Downgrade and untethered jailbreak</p>
@@ -117,6 +116,7 @@
 <p>@ShadowLee19 for bypass boot-partition and boot-ramdisk value iBoot patch</p>
 <p>@JonathanSeals for <a href="https://github.com/JonathanSeals/CBPatcher">CBPatcher</a>, disable kaslr patch, and many tips</p>
 <p>@Benfxmth for bypass reset boot-partition value iBoot patch, and many tips</p>
+<p>@alitek123 for many Odysseus Bundles</p>
 <p>@winocm for opensn0w jailbreak patch</p>
 <p>@daytonhasty for <a href="https://dayt0n.com/articles/Odysseus/">Odysseus</a></p>
 <p>@libimobiledev for idevicerestore</p>
