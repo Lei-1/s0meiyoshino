@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.3.3 make_ipsw ****"
+echo "**** s0meiyoshino v3.3.4 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -1641,7 +1641,13 @@ else
     exit
 fi
 
-hdiutil resize $iOSBuild/ramdisk.dmg -size 40m
+hdiutil resize $iOSBuild/ramdisk.dmg -size 30m
+#n90 8l1     : 25 MB
+#n90 9B176   : 17 MB
+#n90 10B146  : 10 MB
+#n42 13a452  : 21 MB
+#n42 14A5261v: 24 MB
+
 
 hdiutil attach -mountpoint ramdisk/ $iOSBuild/ramdisk.dmg
 
