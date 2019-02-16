@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.3.2 make_ipsw ****"
+echo "**** s0meiyoshino v3.3.3 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -82,6 +82,7 @@ if [ $1 = "iPhone5,2" ]; then
         fi
     else
         echo "[ERROR] This base-iOS is NOT supported!"
+        exit
     fi
 fi
 
@@ -130,7 +131,7 @@ if [ -e ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw" ]; then
     echo ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw OK"
 else
     echo ""$Identifier"_"$BaseFWVer"_"$BaseFWBuild"_Restore.ipsw does not exist"
-exit
+    exit
 fi
 
 #### Set macOS version ####
@@ -141,10 +142,14 @@ disablekaslr=0
 sbops_patch=0
 iBoot9=0
 DeveloperBeta=0
-iBoot9_Partition_patch1="0"
-iBoot9_Partition_patch2="0"
+pangu9=0
+iBoot9_Partition_patch="0"
 iBoot_KASLR="0"
 iOSLIST="0"
+
+BundleType="Down"
+# BundleType == Down; Base on odysseus bundle
+# BundleType == New; Base on s0meiyoshino custom bundle
 
 #### iPhone 4 ####
 if [ $Identifier = "iPhone3,1" ]; then
@@ -544,7 +549,7 @@ if [ $Identifier = "iPhone5,2" ]; then
         RestoreRamdisk="048-2548-005.dmg"
         iBoot_Key="f0943a042103e899250e62043ce8a7d24a446eac77366fcdc12cd21a28828af9"
         iBoot_IV="c13c3705190682c2d4253ecea7910c56"
-        if [ -d "FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle" ]; then
+        if [ -d "FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle" ]; then
             DD=1
         else
             echo "[ERROR] Firmwarebundle was not found."
@@ -708,7 +713,7 @@ if [ $Identifier = "iPhone5,2" ]; then
         RestoreRamdisk="058-0403-004.dmg"
         iBoot_Key="d2c7dbef4dc6e878869f9cee6d9eb479a5811a1a7d3d5e81daa0b2fcfe6909e4"
         iBoot_IV="b3a9e437802f5aed6b73b6d738b18275"
-        if [ -d "FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle" ]; then
+        if [ -d "FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle" ]; then
             DD=1
         else
             echo "[ERROR] Firmwarebundle was not found."
@@ -875,22 +880,337 @@ if [ $Identifier = "iPhone5,2" ]; then
         DD=1
     fi
 
-    if [ $2 = "9.0.2" ]; then
-        #### iOS 9.0.2 ####
-        ## iBoot-2817.1.94~1
+    if [ $2 = "9.0_beta" ]; then
+        #### iOS 9.0 beta                           ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b0e: 00200020"
+        Boot_Ramdisk_Patch="0000bca: 00200020"
+        iBoot9_Partition_Patch="00013b0: f48cf3bf"
+        iOSVersion="9.0_13A4254v"
+        iOSBuild="13A4254v"
+        RestoreRamdisk="058-20975-024.dmg"
+        iBoot_Key="66516901081801e5294d0465af738046778e6661b57f91dfcaf2f0c174580bee"
+        iBoot_IV="7c2b36a9fdb6c57021805dbfa6f502ac"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "9.0_beta_2" ]; then
+        #### iOS 9.0 beta 2                         ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b0e: 00200020"
+        Boot_Ramdisk_Patch="0000c06: 00200020"
+        iBoot9_Partition_Patch="00013f0: b391f3bf"
+        iOSVersion="9.0_13A4280e"
+        iOSBuild="13A4280e"
+        RestoreRamdisk="058-20975-033.dmg"
+        iBoot_Key="05edaa79aaec4882ac3a628255b09697f9cb1bb3b1def9a98ce7641943e6951d"
+        iBoot_IV="ddbe16684e2b37badca22ce2f73b7efa"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "9.0_beta_3" ]; then
+        #### iOS 9.0 beta 3                         ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
         iOSLIST="7"
         sbops_patch=1
         iBoot9=1
         iBootInternalName="n42"
         Boot_Partition_Patch="0000b12: 00200020"
         Boot_Ramdisk_Patch="0000c0a: 00200020"
-        iBoot9_Partition_Patch1="00013f0: 0433f4bf" ## 0xbff43304
-        iBoot9_Partition_Patch2="0043304: 3200" ## 2
+        iBoot9_Partition_Patch="00013f0: b391f3bf"
+        iOSVersion="9.0_13A4293g"
+        iOSBuild="13A4293g"
+        RestoreRamdisk="058-20975-042.dmg"
+        iBoot_Key="2f67b0693946e3e1b411a22d18ff53bedf44bb6fe0dc4a46d08e220bb9b6adb4"
+        iBoot_IV="eee4cd54e5f7a028fc1611f05b63db25"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "9.0_beta_4" ]; then
+        #### iOS 9.0 beta 4                         ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: b391f3bf"
+        iOSVersion="9.0_13A4305g"
+        iOSBuild="13A4305g"
+        RestoreRamdisk="058-20975-051.dmg"
+        iBoot_Key="0cdd9dce1565f2fccbc80a288ddf4daf5e0a50d1ba7e01c1d3ea4822456492b7"
+        iBoot_IV="aadda07a8b3fcb1de0654b0e09ac49ac"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "9.0_beta_5" ]; then
+        #### iOS 9.0 beta 5                         ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: 3392f3bf"
+        iOSVersion="9.0_13A4325c"
+        iOSBuild="13A4325c"
+        RestoreRamdisk="058-20975-058.dmg"
+        iBoot_Key="61583959631576e661055a7be2a6c293237212f2f577a08be31da3007c15cb67"
+        iBoot_IV="5e765d509ce413e7ef18f79e4d851b2d"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "9.0_GM" ]; then
+        #### iOS 9.0 GM                             ####
+        #### This version is beta version           ####
+        #### You need to create a bundle yourself   ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        pangu9=0
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: 3392f3bf"
+        iOSVersion="9.0_13A340"
+        iOSBuild="13A340"
+        RestoreRamdisk="058-03706-362.dmg"
+        iBoot_Key="ee89f3fec20ee389f37689eea8894d3e3c76d2f4ed204c3c5c85d6d19e296647"
+        iBoot_IV="df76f53c1983514eb8cf32c19310d2a4"
+        DeveloperBeta=1
+    fi
+
+    if [ $2 = "9.0" ]; then
+        #### iOS 9.0 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        pangu9=0
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: 3392f3bf"
+        iOSVersion="9.0_13A344"
+        iOSBuild="13A344"
+        RestoreRamdisk="058-03706-363.dmg"
+        iBoot_Key="8667fe328a7dd41fde7dd8b34919718b99143638679c82431a621bb2143ea078"
+        iBoot_IV="547e2505ec2c8b0517fad1d308b6abc8"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.0.1" ]; then
+        #### iOS 9.0.1 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        pangu9=0
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: 3392f3bf"
+        iOSVersion="9.0.1_13A404"
+        iOSBuild="13A404"
+        RestoreRamdisk="058-03706-367.dmg"
+        iBoot_Key="cdaefe386c1fc8adc896c7b6088202dfb8b8c0d06042b1bd383e351584e2868f"
+        iBoot_IV="ca6241f72e6d34ba923f15faf86d0dbf"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.0.2" ]; then
+        #### iOS 9.0.2 ####
+        ## iBoot-2817.1.94~1
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        pangu9=0
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: 3392f3bf"
         iOSVersion="9.0.2_13A452"
         iOSBuild="13A452"
         RestoreRamdisk="058-03706-369.dmg"
         iBoot_Key="b6a0fecaf54e3ebe46c670e74f92f053433f2b7b32d33453b5dbf75b3bdfe612"
         iBoot_IV="23b4fc8e6f8b6aa20e8ab2380b3ee542"
+        DD=1
+    fi
+
+    if [ $2 = "9.1" ]; then
+        #### iOS 9.1 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: 3392f3bf"
+        iOSVersion="9.1_13B143"
+        iOSBuild="13B143"
+        RestoreRamdisk="058-25124-078.dmg"
+        iBoot_Key="08a8b399604b3f0a645499da9ced989c0286393e2c8d2fcea197fbe4891e1b6d"
+        iBoot_IV="4a89aa4c72bf5a6128738f9447f8c6f7"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.2" ]; then
+        #### iOS 9.2 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: c392f3bf"
+        iOSVersion="9.2_13C75"
+        iOSBuild="13C75"
+        RestoreRamdisk="058-25952-079.dmg"
+        iBoot_Key="43dd2a62ca1bc2ab9dd80237f65d0fcc345bfa8b4b687126974c292fed7de455"
+        iBoot_IV="809117c933e30063fdbef74484af8f6d"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.2.1" ]; then
+        #### iOS 9.2.1 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b12: 00200020"
+        Boot_Ramdisk_Patch="0000c0a: 00200020"
+        iBoot9_Partition_Patch="00013f0: c392f3bf"
+        iOSVersion="9.2.1_13D15"
+        iOSBuild="13D15"
+        RestoreRamdisk="058-32359-015.dmg"
+        iBoot_Key="c10a16bb567e8e96db7162d44cd666e513df771a9742371f4f84466ad44fd25a"
+        iBoot_IV="13420d70c4af0e7c796a66f611889b2f"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.3" ]; then
+        #### iOS 9.3 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b1e: 00200020"
+        Boot_Ramdisk_Patch="0000c16: 00200020"
+        iBoot9_Partition_Patch="0001400: 439af3bf"
+        iOSVersion="9.3_13E233"
+        iOSBuild="13E233"
+        RestoreRamdisk="058-25481-331.dmg"
+        iBoot_Key="c1c36ffd890e23a9774b9ce717bfc0e37ed9b6cd8534e61d1ad0b4472caa61d1"
+        iBoot_IV="196a1583b56587544d11b931f0c0774a"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.3r" ]; then
+        #### iOS 9.3 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b1e: 00200020"
+        Boot_Ramdisk_Patch="0000c16: 00200020"
+        iBoot9_Partition_Patch="0001400: 439af3bf"
+        iOSVersion="9.3_13E237"
+        iOSBuild="13E237"
+        RestoreRamdisk="058-25481-332.dmg"
+        iBoot_Key="c1c36ffd890e23a9774b9ce717bfc0e37ed9b6cd8534e61d1ad0b4472caa61d1"
+        iBoot_IV="196a1583b56587544d11b931f0c0774a"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.3.1" ]; then
+        #### iOS 9.3.1 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b1e: 00200020"
+        Boot_Ramdisk_Patch="0000c16: 00200020"
+        iBoot9_Partition_Patch="0001400: 439af3bf"
+        iOSVersion="9.3.1_13E238"
+        iOSBuild="13E238"
+        RestoreRamdisk="058-25481-333.dmg"
+        iBoot_Key="c1c36ffd890e23a9774b9ce717bfc0e37ed9b6cd8534e61d1ad0b4472caa61d1"
+        iBoot_IV="196a1583b56587544d11b931f0c0774a"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.3.2" ]; then
+        #### iOS 9.3.2 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b1e: 00200020"
+        Boot_Ramdisk_Patch="0000c16: 00200020"
+        iBoot9_Partition_Patch="0001400: 439af3bf"
+        iOSVersion="9.3.2_13F69"
+        iOSBuild="13F69"
+        RestoreRamdisk="058-37546-072.dmg"
+        iBoot_Key="3341eef99ca9cd617f767b83cb02dde368eef0a18e87480cea53efc5b39fd954"
+        iBoot_IV="9ff772c17dd807f771fc53f6542fafb6"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.3.3" ]; then
+        #### iOS 9.3.3 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b1e: 00200020"
+        Boot_Ramdisk_Patch="0000c16: 00200020"
+        iBoot9_Partition_Patch="0001400: 439af3bf"
+        iOSVersion="9.3.3_13G34"
+        iOSBuild="13G34"
+        RestoreRamdisk="058-49199-034.dmg"
+        iBoot_Key="5705c05a5872b903b234edbee2fb75b42fa7ee7b26176f1b79eb2a398f2dbddb"
+        iBoot_IV="bfc2716df03cabc915daa041bc0b0865"
+        BundleType="New"
+        DD=1
+    fi
+
+    if [ $2 = "9.3.4" ]; then
+        #### iOS 9.3.4 ####
+        iOSLIST="7"
+        sbops_patch=1
+        iBoot9=1
+        iBootInternalName="n42"
+        Boot_Partition_Patch="0000b1e: 00200020"
+        Boot_Ramdisk_Patch="0000c16: 00200020"
+        iBoot9_Partition_Patch="0001400: 439af3bf"
+        iOSVersion="9.3.4_13G35"
+        iOSBuild="13G35"
+        RestoreRamdisk="058-49199-035.dmg"
+        iBoot_Key="9a6a8533a01050926af980cdeada174678745487abf9dea019c97e6e8f662f5f"
+        iBoot_IV="7ff8a2334f4594dd52a130a8e1e8b6b2"
+        BundleType="New"
         DD=1
     fi
 
@@ -903,8 +1223,7 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBootInternalName="n42"
         Boot_Partition_Patch="0000b1e: 00200020"
         Boot_Ramdisk_Patch="0000c16: 00200020"
-        iBoot9_Partition_Patch1="0001400: 743af4bf"
-        iBoot9_Partition_Patch2="0043A74: 3200"
+        iBoot9_Partition_Patch="0001400: 439af3bf"
         iBoot_KASLR="001a1fa: 00bf002100bf"
         iOSVersion="9.3.5_13G36"
         iOSBuild="13G36"
@@ -938,7 +1257,7 @@ if [ $Identifier = "iPhone5,1" ]; then
 fi
 
 if [ $DeveloperBeta == 1 ]; then
-    if [ -d "FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle" ]; then
+    if [ -d "FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle" ]; then
         DD=1
     else
         echo "[ERROR] Firmwarebundle was not found."
@@ -989,13 +1308,13 @@ if [ "$iOSLIST" = "4" ]; then
         unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3"
         ../bin/xpwntool LLB."$iBootInternalName".RELEASE.img3 LLB."$iBootInternalName".dec.img3 -k $LLB_Key -iv $LLB_IV -decrypt
         ../bin/xpwntool LLB."$iBootInternalName".dec.img3 LLB."$iBootInternalName".dec
-        bspatch LLB."$iBootInternalName".dec PwnedLLB."$iBootInternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/LLB."$iBootInternalName".RELEASE.patch
+        bspatch LLB."$iBootInternalName".dec PwnedLLB."$iBootInternalName".dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/LLB."$iBootInternalName".RELEASE.patch
         ../bin/xpwntool PwnedLLB."$iBootInternalName".dec iBoot -t LLB."$iBootInternalName".dec.img3
         echo "0000010: 63656269" | xxd -r - iBoot
         echo "0000020: 63656269" | xxd -r - iBoot
         tar -cvf bootloader.tar iBoot
         #### Patching iBoot4 ####
-        bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
+        bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
         ../bin/xpwntool PwnediBoot."$iBootInternalName".dec iBoot4 -t iBoot."$iBootInternalName".dec.img3
         echo "0000010: 346F6269" | xxd -r - iBoot4
         echo "0000020: 346F6269" | xxd -r - iBoot4
@@ -1003,7 +1322,7 @@ if [ "$iOSLIST" = "4" ]; then
     #### iOS4Switch = 435 ####
     if [ "$iOS4Switch" = "435" ]; then
         #### Patching iBoot4 ####
-        bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
+        bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
         ../bin/xpwntool PwnediBoot."$iBootInternalName".dec iBoot -t iBoot."$iBootInternalName".dec.img3
         echo "0000010: 63656269" | xxd -r - iBoot
         echo "0000020: 63656269" | xxd -r - iBoot
@@ -1044,8 +1363,7 @@ if [ "$iOSLIST" != "4" ]; then
         fi
 
         if [ $iBoot9 == 1 ]; then
-            echo "$iBoot9_Partition_Patch1" | xxd -r - PwnediBoot."$iBootInternalName".dec
-            echo "$iBoot9_Partition_Patch2" | xxd -r - PwnediBoot."$iBootInternalName".dec
+            echo "$iBoot9_Partition_Patch" | xxd -r - PwnediBoot."$iBootInternalName".dec
         fi
     fi
 
@@ -1292,7 +1610,7 @@ if [ $# == 4 ]; then
     if [ $Identifier = "iPhone5,2" ]&&[ $4 = "--jb" ]; then
         ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/kernelcache.release.dec
         ## kernelpacth by CBPatcher
-        bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
+        bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
         mv -v $iOSBuild/kernelcache.release.n42 $iOSBuild/kernelcache.release.n42_
         ../bin/xpwntool $iOSBuild/pwnkernelcache.release.dec $iOSBuild/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42
         rm $iOSBuild/Downgrade/kernelcache.release.n42
@@ -1305,7 +1623,7 @@ fi
 
 if [ $Identifier = "iPhone5,2" ]&&[ $sbops_patch == 1 ]; then
     ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.dec
-    bspatch $iOSBuild/Downgrade/kernelcache.release.dec $iOSBuild/Downgrade/pwnkernelcache.release.dec ../FirmwareBundles/Down_"$Identifier"_"$iOSVersion".bundle/sbops.patch
+    bspatch $iOSBuild/Downgrade/kernelcache.release.dec $iOSBuild/Downgrade/pwnkernelcache.release.dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/sbops.patch
     mv -v $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42_
     ../bin/xpwntool $iOSBuild/Downgrade/pwnkernelcache.release.dec $iOSBuild/Downgrade/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42_
 
@@ -1352,7 +1670,11 @@ fi
 if [ $Identifier = "iPhone5,2" ]; then
     tar -xvf ../src/A6/bin.tar -C ramdisk/ --preserve-permissions
     mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
-    cp -a -v ../src/A6/partition.sh ramdisk/sbin/reboot
+    if [ $pangu9 == 0 ]; then
+        cp -a -v ../src/A6/partition_pg9.sh ramdisk/sbin/reboot
+    else
+        cp -a -v ../src/A6/partition.sh ramdisk/sbin/reboot
+    fi
     cp -a -v ../src/iPhone5,2/11B554a/ramdiskH.dmg ramdisk/
     chmod 755 ramdisk/sbin/reboot
 fi

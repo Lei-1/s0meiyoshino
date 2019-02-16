@@ -82,7 +82,7 @@ if [ -e "iBoot32Patcher" ]; then
     echo "iBoot32Patcher already exist"
     CC=1
 else
-    git clone https://github.com/NyanSatan/iBoot32Patcher.git
+    git clone https://github.com/dora2-iOS/iBoot32Patcher
     cd iBoot32Patcher
     clang iBoot32Patcher.c finders.c functions.c patchers.c -Wno-multichar -I. -o ../bin/iBoot32Patcher
     cd ../

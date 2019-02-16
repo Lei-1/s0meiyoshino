@@ -1,4 +1,4 @@
-<h1>s0meiyoshino v3.3.2</h1>
+<h1>s0meiyoshino v3.3.3</h1>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5. It may not work in 10.14. Please downgrade to High Sierra.</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -26,16 +26,13 @@
 <p>iOS 6.1.4</p>
 <p>iOS 7.0 - 7.1.2</p>
 <p>iOS 8.0.2</p>
-<p>iOS 9.0.2</p>
+<p>iOS 9.0-9.3.4</p>
 <p>*Downgrade and untethered jailbreak</p>
 <p>iOS 9.3.5</p>
 <br/>
 <h3>iPhone 5 (iPhone5,1)</h3>
 <p>*Downgrade only</p>
 <p>iOS 6.1.4 (untest)</p>
-<br/>
-<p>*problem</p>
-<p>Pangu 9 will not work. There is a problem with disable OTA Update. I will fix it soon.</p>
 <br/>
 <p>The bundle is provided from <a href="https://github.com/dora2-iOS/xpwn/tree/master/ipsw-patch/FirmwareBundles">here</a>.</p>
 <br/>
