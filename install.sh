@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "**** s0meiyoshino v3.3 installer ****"
+echo "**** s0meiyoshino v3.4 installer ****"
 ## if [ -e "odysseus" ]; then
 ## echo "Odysseus already exist"
 ## else
@@ -50,7 +50,17 @@ if [ ! -d "src/iPhone5,1/BB" ]; then
     mkdir src/iPhone5,1/BB/
 fi
 
-if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]; then
+if [ ! -d "src/iPhone4,1/11D257" ]; then
+mkdir src/iPhone4,1/11D257/
+fi
+
+if [ ! -d "src/iPhone4,1/BB" ]; then
+mkdir src/iPhone4,1/BB/
+fi
+
+
+
+if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone4,1/11D257/ramdiskH.dmg" ]; then
     echo "iloader already exists"
     AA=1
 else
@@ -58,7 +68,8 @@ else
     cp -a iloader/iPhone3,1/11D257/ramdiskH_beta4.dmg ./src/iPhone3,1/11D257/ramdiskH.dmg
     cp -a iloader/iPhone5,2/11B554a/ramdiskH_beta4.dmg ./src/iPhone5,2/11B554a/ramdiskH.dmg
     cp -a iloader/iPhone5,2/11B554a/ramdiskH_beta4.dmg ./src/iPhone5,1/11B554a/ramdiskH.dmg
-    if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]; then
+    cp -a iloader/iPhone4,1/11D257/ramdiskH.dmg ./src/iPhone4,1/11D257/ramdiskH.dmg
+    if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone4,1/11D257/ramdiskH.dmg" ]; then
         AA=1
     else
         AA=0
@@ -167,7 +178,28 @@ else
     fi
 fi
 
-if [ $AA == 1 ]&&[ $BB == 1 ]&&[ $CC == 1 ]&&[ $DD == 1 ]&&[ $EE == 1 ]&&[ $FF == 1 ]; then
+if [ -e "src/iPhone4,1/BB/Trek-3.4.03.Release.bbfw" ]&&[ -e "src/iPhone4,1/BB/Trek-3.4.03.Release.plist" ]; then
+    echo "N94 BBFW (Trek-3.4.03) already exists"
+    GG=1
+else
+    bin/partialZipBrowser -g Firmware/Trek-3.4.03.Release.bbfw http://appldnld.apple.com/iOS6.1/091-2611.20130319.Fr54r/iPhone4,1_6.1.3_10B329_Restore.ipsw
+    bin/partialZipBrowser -g Firmware/Trek-3.4.03.Release.plist http://appldnld.apple.com/iOS6.1/091-2611.20130319.Fr54r/iPhone4,1_6.1.3_10B329_Restore.ipsw
+    mv -v Trek-3.4.03.Release.bbfw src/iPhone4,1/BB/
+    mv -v Trek-3.4.03.Release.plist src/iPhone4,1/BB/
+    echo /rMx1HxFmnQafZ7buJaYxDW4qsY= | base64 --decode > src/iPhone4,1/BB/UniqueBuildID
+    echo rTRDFcZPBYMKkCeZs3XC4rsV0Mo= | base64 --decode > src/iPhone4,1/BB/AMSS-DownloadDigest
+    echo UMf1FQsFTmaNLaMw1bZCqCNG2do= | base64 --decode > src/iPhone4,1/BB/AMSS-HashTableDigest
+    echo XLDOaydMxcNeZsyg2WepzeY1pRs= | base64 --decode > src/iPhone4,1/BB/OSBL-DownloadDigest
+    echo WAAAAMDFAQAGWb86yHprHKdWuKYKg7tIaZbFtA== | base64 --decode > src/iPhone4,1/BB/RestoreDBL-PartialDigest
+    echo ZAAAAMDGAQC9f3Z98ATNa7/pxE7hjOEmjQbqcQ== | base64 --decode > src/iPhone4,1/BB/eDBL-PartialDigest
+    if [ -e "src/iPhone4,1/BB/Trek-3.4.03.Release.bbfw" ]&&[ -e "src/iPhone4,1/BB/Trek-3.4.03.Release.plist" ]; then
+        GG=1
+    else
+        GG=0
+    fi
+fi
+
+if [ $AA == 1 ]&&[ $BB == 1 ]&&[ $CC == 1 ]&&[ $DD == 1 ]&&[ $EE == 1 ]&&[ $FF == 1 ]&&[ $GG == 1 ]; then
     echo "Done!"
 else
     echo ""
@@ -190,6 +222,10 @@ else
     fi
     if [ $FF != 1 ]; then
         echo "Failed install N41 BB"
+        echo "Please try again"
+    fi
+    if [ $GG != 1 ]; then
+        echo "Failed install N94 BB"
         echo "Please try again"
     fi
 

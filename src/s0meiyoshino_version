@@ -75,3 +75,9 @@ v3.3.4 - fix ramdisk size
 committed Feb 16, 2019
 な阪関無
 ** ramdiskのサイズの調整。(Thanks @tomrobertson02)
+
+v3.4 - Add support for iPhone4,1 (untest)
+committed Feb 23, 2019
+** iPhone4,1のサポートの試験的な追加。(Thanks @nyanko_kota)
+*** iPhone4,1はiOS 7.1.2のみサポート。
+*** iOS 7のiBoot vulnerabilityを発動させるためにiOS 7.1(??), 7.1.1, 7.1.2のいずれかのSHSHが必要。
