@@ -1,29 +1,28 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.4 make_ipsw ****"
+echo "**** s0meiyoshino v3.5 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
     echo ""
     echo "[OPTION]"
-    echo "--verbose                 : [NoJB] Inject Boot-args \"-v\""
-    echo "--cs-disable              : [NoJB] Inject Boot-args \"cs_enforcement_disable=1\""
-    echo "--cs-disable-verbose      : [NoJB] Inject Boot-args \"cs_enforcement_disable=1 -v\""
-    echo "--jb                      : [JB] Jailbreak iOS (iPhone5,2 9.3.5 only) [BETA]"
+    echo "  --verbose           : [arg1] Inject Boot-args \"-v\""
+    echo "  --jb                : [arg1] Jailbreak iOS (iPhone5,2 9.x only) [BETA]"
+####echo ""
+####echo "  \"--jb\" FLAG OPTION"
+####echo "    --pg9             : [arg2] Use Pangu 9 untether instead of CBPatcher (9.0-9.0.2 only)"
     echo ""
     echo "[example]"
     echo "./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose"
     echo "./make_ipsw.sh iPhone5,2 9.3.5 7.0.4 --jb"
+####echo "./make_ipsw.sh iPhone5,2 9.0.2 7.0.4 --jb --pg9"
     exit
 fi
 
 if [ $# == 4 ]; then
-    if [ $4 != "--verbose" ] && [ $4 != "--cs-disable" ] && [ $4 != "--cs-disable-verbose" ] && [ $4 != "--jb" ]; then
+    if [ $4 != "--verbose" ] && [ $4 != "--jb" ]; then
         echo "[ERROR] Invalid argument"
         exit
-    fi
-    if [ $4 = "--cs-disable" ]&&[ $4 = "--cs-disable-verbose" ]; then
-        echo "You need to get PE_i_can_has_debugger=1"
     fi
 fi
 
@@ -1021,6 +1020,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_Key="ee89f3fec20ee389f37689eea8894d3e3c76d2f4ed204c3c5c85d6d19e296647"
         iBoot_IV="df76f53c1983514eb8cf32c19310d2a4"
         DeveloperBeta=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.0" ]; then
@@ -1040,6 +1043,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="547e2505ec2c8b0517fad1d308b6abc8"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.0.1" ]; then
@@ -1059,6 +1066,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="ca6241f72e6d34ba923f15faf86d0dbf"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.0.2" ]; then
@@ -1078,6 +1089,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_Key="b6a0fecaf54e3ebe46c670e74f92f053433f2b7b32d33453b5dbf75b3bdfe612"
         iBoot_IV="23b4fc8e6f8b6aa20e8ab2380b3ee542"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.1" ]; then
@@ -1096,6 +1111,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="4a89aa4c72bf5a6128738f9447f8c6f7"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.2" ]; then
@@ -1114,6 +1133,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="809117c933e30063fdbef74484af8f6d"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.2.1" ]; then
@@ -1132,6 +1155,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="13420d70c4af0e7c796a66f611889b2f"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.3" ]; then
@@ -1150,6 +1177,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="196a1583b56587544d11b931f0c0774a"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.3r" ]; then
@@ -1168,6 +1199,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="196a1583b56587544d11b931f0c0774a"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.3.1" ]; then
@@ -1186,6 +1221,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="196a1583b56587544d11b931f0c0774a"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.3.2" ]; then
@@ -1204,6 +1243,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="9ff772c17dd807f771fc53f6542fafb6"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.3.3" ]; then
@@ -1222,6 +1265,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="bfc2716df03cabc915daa041bc0b0865"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.3.4" ]; then
@@ -1240,6 +1287,10 @@ if [ $Identifier = "iPhone5,2" ]; then
         iBoot_IV="7ff8a2334f4594dd52a130a8e1e8b6b2"
         BundleType="New"
         DD=1
+        if [ $4 = "--jb" ]; then
+            JB=1
+            sbops_patch=0
+        fi
     fi
 
     if [ $2 = "9.3.5" ]; then
@@ -1317,7 +1368,7 @@ if [ $DD == 0 ]; then
 fi
 
 if [ $# == 4 ]; then
-    if [ $4 = "--jb" ]&&[ $2 != "9.3.5" ]&&[ $Identifier = "iPhone5,2" ]; then
+    if [ $4 = "--jb" ]&&[ $JB != 1 ]; then
         echo "[ERROR] This version is NOT supported jailbreak!"
         exit
     fi
@@ -1670,12 +1721,17 @@ if [ $# == 4 ]; then
     if [ $Identifier = "iPhone5,2" ]&&[ $4 = "--jb" ]; then
         ../bin/xpwntool $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/kernelcache.release.dec
         ## kernelpacth by CBPatcher
-        bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
-        mv -v $iOSBuild/kernelcache.release.n42 $iOSBuild/kernelcache.release.n42_
-        ../bin/xpwntool $iOSBuild/pwnkernelcache.release.dec $iOSBuild/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42
-        rm $iOSBuild/Downgrade/kernelcache.release.n42
-        cp -a -v $iOSBuild/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42
-        rm $iOSBuild/kernelcache.release.n42_
+        #bspatch $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/kernelcache.patch
+        if [ $2 = "9.3r" ];then
+            ../bin/CBPatcher $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec 9.3
+        else
+            ../bin/CBPatcher $iOSBuild/kernelcache.release.dec $iOSBuild/pwnkernelcache.release.dec "$2"
+        fi
+        mv -v $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/Downgrade/kernelcache.release.n42_
+        ../bin/xpwntool $iOSBuild/pwnkernelcache.release.dec $iOSBuild/Downgrade/kernelcache.release.n42 -t $iOSBuild/Downgrade/kernelcache.release.n42_
+        rm $iOSBuild/Downgrade/kernelcache.release.n42_
+        rm $iOSBuild/kernelcache.release.n42
+        cp -a -v $iOSBuild/Downgrade/kernelcache.release.n42 $iOSBuild/kernelcache.release.n42
         rm $iOSBuild/pwnkernelcache.release.dec
         rm $iOSBuild/kernelcache.release.dec
     fi

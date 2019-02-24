@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "**** s0meiyoshino v3.4 installer ****"
+echo "**** s0meiyoshino v3.5 installer ****"
 ## if [ -e "odysseus" ]; then
 ## echo "Odysseus already exist"
 ## else
@@ -14,9 +14,11 @@ echo "**** s0meiyoshino v3.4 installer ****"
 AA=0
 BB=0
 CC=0
+CB=0
 DD=0
 EE=0
 FF=0
+GG=0
 
 if [ ! -d "shsh" ]; then
     mkdir shsh
@@ -89,21 +91,38 @@ else
     fi
 fi
 
-if [ -e "iBoot32Patcher" ]; then
+if [ -e "bin/iBoot32Patcher" ]; then
     echo "iBoot32Patcher already exist"
     CC=1
 else
     git clone https://github.com/dora2-iOS/iBoot32Patcher
     cd iBoot32Patcher
     clang iBoot32Patcher.c finders.c functions.c patchers.c -Wno-multichar -I. -o ../bin/iBoot32Patcher
-    cd ../
+    cd ..
 
-    if [ -e "iBoot32Patcher" ]; then
+    if [ -e "bin/iBoot32Patcher" ]; then
         CC=1
     else
         CC=0
     fi
 fi
+
+if [ -e "bin/CBPatcher" ]; then
+    echo "CBPatcher already exist"
+    CB=1
+else
+    git clone https://github.com/dora2-iOS/CBPatcher.git
+    cd CBPatcher
+    make
+    mv -v CBPatcher ../bin
+    cd ..
+    if [ -e "bin/CBPatcher" ]; then
+        CB=1
+    else
+        CB=0
+    fi
+fi
+
 
 if [ -e "bin/partialZipBrowser" ]; then
     echo "partialZipBrowser already exist"
@@ -199,7 +218,7 @@ else
     fi
 fi
 
-if [ $AA == 1 ]&&[ $BB == 1 ]&&[ $CC == 1 ]&&[ $DD == 1 ]&&[ $EE == 1 ]&&[ $FF == 1 ]&&[ $GG == 1 ]; then
+if [ $AA == 1 ]&&[ $BB == 1 ]&&[ $CC == 1 ]&&[ $CB == 1 ]&&[ $DD == 1 ]&&[ $EE == 1 ]&&[ $FF == 1 ]&&[ $GG == 1 ]; then
     echo "Done!"
 else
     echo ""
@@ -211,6 +230,9 @@ else
     fi
     if [ $CC != 1 ]; then
         echo "Failed install iBoot32Patcher"
+    fi
+    if [ $CB != 1 ]; then
+        echo "Failed install CBPatcher"
     fi
     if [ $DD != 1 ]; then
         echo "Failed install partialZipBrowser"

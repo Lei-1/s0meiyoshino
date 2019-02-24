@@ -81,3 +81,7 @@ committed Feb 23, 2019
 ** iPhone4,1のサポートの試験的な追加。(Thanks @nyanko_kota)
 *** iPhone4,1はiOS 7.1.2のみサポート。
 *** iOS 7のiBoot vulnerabilityを発動させるためにiOS 7.1(??), 7.1.1, 7.1.2のいずれかのSHSHが必要。
+
+v3.5 - Add 9.x jailbreak for iPhone5,2
+committed Feb 24, 2019
+** v3.2に加えてiPhone5,2の9.xのjailbreakをサポート。
