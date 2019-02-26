@@ -53,7 +53,7 @@
 <p></p>
 <p>[OPTION]</p>
 <p>--verbose                 : Inject Boot-args "-v"</p>
-<p>--jb                      : Jailbreak iOS (iPhone5,2 9.3.5 only) (BETA)</p>
+<p>--jb                      : Jailbreak iOS (iPhone5,2 9.x only) (BETA)</p>
 <p></p>
 <p>example: ./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose</p>
 <br/>
