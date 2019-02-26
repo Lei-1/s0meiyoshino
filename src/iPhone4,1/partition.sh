@@ -41,9 +41,9 @@ sleep 1s
 
 ### Install exploit_2nd
 if [ "$Xted" = "1" ]; then
-dd of=/dev/rdisk0s1s4 if=/ramdiskH.dmg bs=512k count=1
+dd of=/dev/rdisk0s1s4 if=/ramdiskF.dmg bs=512k count=1
 else
-dd of=/dev/rdisk0s1s3 if=/ramdiskH.dmg bs=512k count=1
+dd of=/dev/rdisk0s1s3 if=/ramdiskF.dmg bs=512k count=1
 fi
 sleep 3s
 nvram boot-partition=2
