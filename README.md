@@ -1,4 +1,4 @@
-<h1>s0meiyoshino v3.5</h1>
+<h1>s0meiyoshino v3.5.1</h1>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5. It may not work in 10.14. Please downgrade to High Sierra.</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -20,7 +20,7 @@
 <h3>iPhone 4s (iPhone4,1)</h3>
 <p>For iPhone 4s, SHSH of either iOS 7.1(??) - 7.1.2 is required.</p>
 <p>*Downgrade only</p>
-<p>iOS 7.1.2</p>
+<p>iOS 7.1.2 [TETHERED]</p>
 <br/>
 <h3>iPhone 5 (iPhone5,2)</h3>
 <p>For iPhone 5, SHSH of either iOS 7.0 - 7.0.6 is required.</p>
@@ -53,8 +53,6 @@
 <p></p>
 <p>[OPTION]</p>
 <p>--verbose                 : Inject Boot-args "-v"</p>
-<p>--cs-disable              : Inject Boot-args "cs_enforcement_disable=1"</p>
-<p>--cs-disable-verbose      : Inject Boot-args "cs_enforcement_disable=1 -v"</p>
 <p>--jb                      : Jailbreak iOS (iPhone5,2 9.3.5 only) (BETA)</p>
 <p></p>
 <p>example: ./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose</p>

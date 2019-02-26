@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "**** s0meiyoshino v3.5 installer ****"
+echo "**** s0meiyoshino v3.5.1 installer ****"
 ## if [ -e "odysseus" ]; then
 ## echo "Odysseus already exist"
 ## else
@@ -62,7 +62,7 @@ fi
 
 
 
-if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone4,1/11D257/ramdiskH.dmg" ]; then
+if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone4,1/11D257/ramdiskF.dmg" ]; then
     echo "iloader already exists"
     AA=1
 else
@@ -70,8 +70,8 @@ else
     cp -a iloader/iPhone3,1/11D257/ramdiskH_beta4.dmg ./src/iPhone3,1/11D257/ramdiskH.dmg
     cp -a iloader/iPhone5,2/11B554a/ramdiskH_beta4.dmg ./src/iPhone5,2/11B554a/ramdiskH.dmg
     cp -a iloader/iPhone5,2/11B554a/ramdiskH_beta4.dmg ./src/iPhone5,1/11B554a/ramdiskH.dmg
-    cp -a iloader/iPhone4,1/11D257/ramdiskH.dmg ./src/iPhone4,1/11D257/ramdiskH.dmg
-    if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone4,1/11D257/ramdiskH.dmg" ]; then
+    cp -a iloader/iPhone4,1/11D257/ramdiskF.dmg ./src/iPhone4,1/11D257/ramdiskF.dmg
+    if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone4,1/11D257/ramdiskF.dmg" ]; then
         AA=1
     else
         AA=0

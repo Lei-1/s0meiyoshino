@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.5 make_ipsw ****"
+echo "**** s0meiyoshino v3.5.1 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -1813,7 +1813,7 @@ if [ $Identifier = "iPhone4,1" ]; then
     tar -xvf ../src/iPhone4,1/bin.tar -C ramdisk/ --preserve-permissions
     mv -v ramdisk/sbin/reboot ramdisk/sbin/reboot_
     cp -a -v ../src/iPhone4,1/partition.sh ramdisk/sbin/reboot
-    cp -a -v ../src/iPhone4,1/11D257/ramdiskH.dmg ramdisk/
+    cp -a -v ../src/iPhone4,1/11D257/ramdiskF.dmg ramdisk/
     chmod 755 ramdisk/sbin/reboot
 fi
 
@@ -1858,3 +1858,6 @@ rm -r tmp_ipsw
 
 #### Done ####
 echo "Done!"
+if [$Identifier = "iPhone4,1"]; then
+    echo "This is a tethered downgrade. After restore, you need to send boot chain from pwned recovery mode."
+fi
