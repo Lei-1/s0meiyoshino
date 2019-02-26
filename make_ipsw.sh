@@ -1858,6 +1858,6 @@ rm -r tmp_ipsw
 
 #### Done ####
 echo "Done!"
-if [$Identifier = "iPhone4,1"]; then
+if [ $Identifier = "iPhone4,1" ]; then
     echo "This is a tethered downgrade. After restore, you need to send boot chain from pwned recovery mode."
 fi
