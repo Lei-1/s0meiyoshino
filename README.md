@@ -71,11 +71,6 @@
 <p>Even if you restore it with OFW in iTunes, it will be in recovery mode as it is.</p>
 <p></p>
 <p>It can be deleted in the following way.</p>
-<p>(1) Jailbreak</p>
-<p>(2) exec command "nvram -d boot-partition"</p>
-<p>(3) reboot and restore</p>
-<p></p>
-<p>If you have already restored and you are in Recovery Mode</p>
 <p>(1) Booting SSH ramdisk (exploited limera1n/SHAtter or De Rebus Antiquis)</p>
 <p>(2) Execution command "nvram -d boot-partition"</p>
 <p>(3) reboot and restore</p>
@@ -85,7 +80,6 @@
 <p>However, since iOS 9 and later ignore this, if you want to restore it, do as follows.</p>
 <p>(1) Restore iOS 9.0-10.3.3</p>
 <p>(2) Jailbreak</p>
-<p>(3) Execution command "nvram -d boot-partition"</p>
 <p>(4) Execution command "nvram -d boot-ramdisk"</p>
 <p>(5) Reboot</p>
 <br/>
