@@ -1,4 +1,4 @@
-<h1>s0meiyoshino v3.5.1</h1>
+<h1>s0meiyoshino v3.5.2</h1>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5. It may not work in 10.14. Please downgrade to High Sierra.</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -16,11 +16,6 @@
 <p>iOS 5.1.1 (9B206)</p>
 <p>iOS 6.0 - 6.1.3</p>
 <p>iOS 7.0 - 7.1.1</p>
-<br/>
-<h3>iPhone 4s (iPhone4,1)</h3>
-<p>For iPhone 4s, SHSH of either iOS 7.1(??) - 7.1.2 is required.</p>
-<p>*Downgrade only</p>
-<p>iOS 7.1.2 [TETHERED]</p>
 <br/>
 <h3>iPhone 5 (iPhone5,2)</h3>
 <p>For iPhone 5, SHSH of either iOS 7.0 - 7.0.6 is required.</p>
@@ -62,7 +57,7 @@
 <p>Then, execute the following.</p>
 <p>./restore4.sh</p>
 <br/>
-<h3>Restore (iPhone 4s/5)</h3>
+<h3>Restore (iPhone 5)</h3>
 <p>First, put shsh of 7.x in the shsh/ directory.</p>
 <p>And, change shsh file name. If you want to downgrade to 6.1.4 on iPhone 5 (Global), it will be as follows.</p>
 <p>[ECID]-iPhone5,2-7.0.x.shsh -> [ECID]-iPhone5,2-6.1.4.shsh</p>
@@ -81,16 +76,11 @@
 <p>(3) reboot and restore</p>
 <p></p>
 <p>If you have already restored and you are in Recovery Mode</p>
-<p>(1) Booting SSH ramdisk</p>
-<p>(2) exec command "nvram -d boot-partition"</p>
+<p>(1) Booting SSH ramdisk (exploited limera1n/SHAtter or De Rebus Antiquis)</p>
+<p>(2) Execution command "nvram -d boot-partition"</p>
 <p>(3) reboot and restore</p>
-<p>or</p>
-<p>(1) Downgrade (Untethered or Tethered) iOS 6</p>
-<p>(2) Jailbreak and tethered boot by redsn0w</p>
-<p>(3) exec command "nvram -d boot-partition"</p>
-<p>(4) reboot and restore</p>
 <br/>
-<h2>How to delete exploit (iPhone 4s/5)</h2>
+<h2>How to delete exploit (iPhone 5)</h2>
 <p>This method adds "boot-partition", and "boot-ramdisk" to the nvram variable.</p>
 <p>However, since iOS 9 and later ignore this, if you want to restore it, do as follows.</p>
 <p>(1) Restore iOS 9.0-10.3.3</p>
@@ -98,12 +88,6 @@
 <p>(3) Execution command "nvram -d boot-partition"</p>
 <p>(4) Execution command "nvram -d boot-ramdisk"</p>
 <p>(5) Reboot</p>
-<br/>
-<h2>How to jailbreak iOS 4.3.5</h2>
-<p>(1) Tethered Jailbreak by redsn0w.</p>
-<p>(2) Tethered Boot by redsn0w.</p>
-<p>(3) Replace kernelcache with pwnedkc of redsn0w.</p>
-<p>(4) Reboot!</p>
 <br/>
 <h2>Credit</h2>
 <p>@xerub for <a href="https://xerub.github.io/ios/iboot/2018/05/10/de-rebus-antiquis.html">De Rebus Antiquis</a></p>
