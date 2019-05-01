@@ -1,11 +1,11 @@
 #!/bin/bash
-echo "**** s0meiyoshino v2.0 restore4.sh ****"
+echo "**** s0meiyoshino v3.5.4 restore4.sh ****"
 echo "iPhone3,1 only"
 
 OSXVer=`sw_vers -productVersion | awk -F. '{print $2}'`
 
 echo "Select restore iOS version"
-select iOSVer in iPhone3,1_4.3.3_8J2 iPhone3,1_4.3.5_8L1 iPhone3,1_5.1.1_9B206 iPhone3,1_6.0_10A403 iPhone3,1_6.0.1_10A523 iPhone3,1_6.1_10B144 iPhone3,1_6.1.2_10B146 iPhone3,1_6.1.3_10B329 iPhone3,1_7.0_11A465 iPhone3,1_7.0.2_11A501 iPhone3,1_7.0.3_11B511 iPhone3,1_7.0.4_11B554a iPhone3,1_7.0.6_11B651 iPhone3,1_7.1_11D169 iPhone3,1_7.1.1_11D201 exit
+select iOSVer in iPhone3,1_4.3.3_8J2 iPhone3,1_4.3.5_8L1 iPhone3,1_5.1.1_9B206 iPhone3,1_6.0_10A403 iPhone3,1_6.0.1_10A523 iPhone3,1_6.1_10B144 iPhone3,1_6.1.2_10B146 iPhone3,1_6.1.3_10B329 iPhone3,1_7.0_11A465 iPhone3,1_7.0.2_11A501 iPhone3,1_7.0.3_11B511 iPhone3,1_7.0.4_11B554a iPhone3,1_7.0.6_11B651 iPhone3,1_7.1_11D169 iPhone3,1_7.1.1_11D201 iPhone3,1_7.1.2_11D257 exit
 do
 
     if [ "$iOSVer" = "iPhone3,1_4.3.3_8J2" ]; then
@@ -100,6 +100,12 @@ do
         break
     fi
 
+    if [ "$iOSVer" = "iPhone3,1_7.1.2_11D257" ]; then
+        iOSVersion="7.1.2"
+        iOS_IPSW="iPhone3,1_7.1.2_11D257"
+        break
+    fi
+
     if [ "$iOSVer" = "exit" ]; then
         exit
     fi
@@ -114,7 +120,9 @@ cd ../
 if [ -e "iPhone3,1_7.1.2_11D257_Restore.ipsw" ]; then
     echo "getting shsh..."
     ECID="$((./bin/idevicerestore -t iPhone3,1_7.1.2_11D257_Restore.ipsw) | sed -n -e 's/^.*Found ECID //p')"
-    mv -v shsh/$ECID-iPhone3,1-7.1.2.shsh shsh/$ECID-iPhone3,1-$iOSVersion.shsh
+    if [ "$iOSVersion" != "7.1.2" ]; then
+        mv -v shsh/$ECID-iPhone3,1-7.1.2.shsh shsh/$ECID-iPhone3,1-$iOSVersion.shsh
+    fi
 else
     echo "iPhone3,1_7.1.2_11D257_Restore.ipsw does not exist"
 fi

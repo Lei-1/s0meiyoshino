@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.5.2 make_ipsw ****"
+echo "**** s0meiyoshino v3.5.4 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -8,6 +8,7 @@ if [ $# -lt 3 ]; then
     echo "[OPTION]"
     echo "  --verbose           : [arg1] Inject Boot-args \"-v\""
     echo "  --jb                : [arg1] Jailbreak iOS (iPhone5,2 9.x only) [BETA]"
+    echo "  --remove            : [arg1] Remove nvram variable (iPhone3,1 7.1.2 only) [BETA]"
 ####echo ""
 ####echo "  \"--jb\" FLAG OPTION"
 ####echo "    --pg9             : [arg2] Use Pangu 9 untether instead of CBPatcher (9.0-9.0.2 only)"
@@ -15,12 +16,15 @@ if [ $# -lt 3 ]; then
     echo "[example]"
     echo "./make_ipsw.sh iPhone5,2 6.1.4 7.0.4 --verbose"
     echo "./make_ipsw.sh iPhone5,2 9.3.5 7.0.4 --jb"
+    echo ""
+    echo "[remove nvram variable]"
+    echo "./make_ipsw.sh iPhone3,1 7.1.2 7.1.2 --remove"
 ####echo "./make_ipsw.sh iPhone5,2 9.0.2 7.0.4 --jb --pg9"
     exit
 fi
 
 if [ $# == 4 ]; then
-    if [ $4 != "--verbose" ] && [ $4 != "--jb" ]; then
+    if [ $4 != "--verbose" ] && [ $4 != "--jb" ] && [ $4 != "--remove" ]; then
         echo "[ERROR] Invalid argument"
         exit
     fi
@@ -346,6 +350,19 @@ if [ $Identifier = "iPhone3,1" ]; then
         RestoreRamdisk="058-00093-002.dmg"
         iBoot_Key="c6fbf428e0105ab22b2abaefd20ca22c2084e200f74e8a3b08298a54f8bfe28f"
         iBoot_IV="b110991061d76f74c1fc05ddd7cff540"
+        DD=1
+    fi
+
+    if [ $2 = "7.1.2" ]; then
+        #### iOS 7.1.1 ####
+        ## iBoot-1940.10.58~122
+        iOSLIST="7"
+        Boot_Partition_Patch="0000a54: 00200020"
+        iOSVersion="7.1.2_11D257"
+        iOSBuild="11D257"
+        RestoreRamdisk="058-4107-013.dmg"
+        iBoot_Key="63a44cf6a2b356125aac09289e76c66ee82cffd8567d9e9a7d5fe3f371ebaab5"
+        iBoot_IV="2006934d7837f097747679602033800b"
         DD=1
     fi
 
@@ -1329,6 +1346,11 @@ if [ $# == 4 ]; then
     fi
 fi
 
+if [ $iOSBuild != "11D257" ]&&[ $Identifier != "iPhone3,1" ]&&[ $4 = "--remove" ]; then
+    echo "[ERROR] This version is NOT supported option!"
+    exit
+fi
+
 ### look ipsw??
 if [ -e ""$Identifier"_"$iOSVersion"_Restore.ipsw" ]; then
     echo ""$Identifier"_"$iOSVersion"_Restore.ipsw OK"
@@ -1427,12 +1449,16 @@ fi
 
 cd ../
 #### Make custom ipsw by odysseus ####
-if [ "$iOSLIST" = "4" ] && [ $Identifier = "iPhone3,1" ]; then
+if [ "$iOSLIST" = "4" ] && [ $Identifier = "iPhone3,1" ] && [ $4 != "--remove" ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory
 fi
 
-if [ "$iOSLIST" != "4" ] && [ $Identifier = "iPhone3,1" ]; then
+if [ "$iOSLIST" != "4" ] && [ $Identifier = "iPhone3,1" ] && [ $4 != "--remove" ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory tmp_ipsw/bootloader.tar
+fi
+
+if [ $iOSBuild = "11D257" ]&&[ $Identifier = "iPhone3,1" ]&&[ $4 = "--remove" ]; then
+    ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory
 fi
 
 if [ $Chip != "A4" ]&&[ $JB != 1 ]; then
@@ -1764,6 +1790,13 @@ if [ $# == 4 ]; then
         cp -a -v ../src/A6/jb9/fstab ramdisk/jb
         chmod 755 ramdisk/sbin/reboot
     fi
+fi
+
+if [ $iOSBuild = "11D257" ]&&[ $Identifier = "iPhone3,1" ]&&[ $4 = "--remove" ]; then
+    rm -rf ramdisk/sbin/reboot
+    rm -rf ramdisk/ramdiskH.dmg
+    cp -a -v ../src/iPhone3,1/remove_exploit.sh ramdisk/sbin/reboot
+    chmod 755 ramdisk/sbin/reboot
 fi
 
 sleep 1s

@@ -1,4 +1,4 @@
-<h1>s0meiyoshino v3.5.2</h1>
+<h1>s0meiyoshino v3.5.4</h1>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5. It may not work in 10.14. Please downgrade to High Sierra.</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -15,7 +15,7 @@
 <p>iOS 4.3.3 (incomplete), 4.3.5</p>
 <p>iOS 5.1.1 (9B206)</p>
 <p>iOS 6.0 - 6.1.3</p>
-<p>iOS 7.0 - 7.1.1</p>
+<p>iOS 7.0 - 7.1.2</p>
 <br/>
 <h3>iPhone 5 (iPhone5,2)</h3>
 <p>For iPhone 5, SHSH of either iOS 7.0 - 7.0.6 is required.</p>
@@ -71,9 +71,8 @@
 <p>Even if you restore it with OFW in iTunes, it will be in recovery mode as it is.</p>
 <p></p>
 <p>It can be deleted in the following way.</p>
-<p>(1) Booting SSH ramdisk (exploited limera1n/SHAtter or De Rebus Antiquis)</p>
-<p>(2) Execution command "nvram -d boot-partition"</p>
-<p>(3) reboot and restore</p>
+<p>(1) Make Remove Custom Firmware [./make_ipsw.sh iPhone3,1 7.1.2 7.1.2 --remove]</p>
+<p>(2) Restore using RCFW</p>
 <br/>
 <h2>How to delete exploit (iPhone 5)</h2>
 <p>This method adds "boot-partition", and "boot-ramdisk" to the nvram variable.</p>
