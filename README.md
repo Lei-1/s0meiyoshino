@@ -1,4 +1,4 @@
-<h1>s0meiyoshino v3.5.4</h1>
+<h1>s0meiyoshino v3.5.5</h1>
 <p>It is a downgrade and untethered jailbreak tool to iOS 4-9 that exploited the boot chain of iOS 7 iBoot using @xerub's De Rebus Antiquis.</p>
 <p>Operation confirmed with OS X 10.10.5 and MacOS 10.13.5. It may not work in 10.14. Please downgrade to High Sierra.</p>
 <p>Please secure about 10 GB of free space.</p>
@@ -12,22 +12,21 @@
 <h2>Supported version</h2>
 <h3>iPhone 4 (iPhone3,1)</h3>
 <p>*Downgrade only</p>
-<p>iOS 4.3.3 (incomplete), 4.3.5</p>
-<p>iOS 5.1.1 (9B206)</p>
-<p>iOS 6.0 - 6.1.3</p>
-<p>iOS 7.0 - 7.1.2</p>
+<p>iOS 4: 4.3.5</p>
+<p>iOS 5: 5.1.1 (9B206)</p>
+<p>iOS 6: 6.0 - 6.1.3</p>
+<p>iOS 7: 7.0 - 7.1.2</p>
 <br/>
 <h3>iPhone 5 (iPhone5,2)</h3>
 <p>For iPhone 5, SHSH of either iOS 7.0 - 7.0.6 is required.</p>
 <p>But, downgrade target SHSH is unnecessary!</p>
 <br/>
 <p>*Downgrade only</p>
-<p>iOS 6.0 - 6.1.2</p>
-<p>iOS 6.1.4</p>
-<p>iOS 7.0 - 7.1.2</p>
-<p>iOS 8.0.2</p>
+<p>iOS 6: 6.0 - 6.1.2, 6.1.4</p>
+<p>iOS 7: 7.0 - 7.1.2</p>
+<p>iOS 8: 8.0.2</p>
 <p>*Downgrade and untethered jailbreak</p>
-<p>iOS 9.0-9.3.5</p>
+<p>iOS 9: 9.0 - 9.3.5</p>
 <br/>
 <h3>iPhone 5 (iPhone5,1)</h3>
 <p>*Downgrade only</p>
@@ -77,7 +76,7 @@
 <h2>How to delete exploit (iPhone 5)</h2>
 <p>This method adds "boot-partition", and "boot-ramdisk" to the nvram variable.</p>
 <p>However, since iOS 9 and later ignore this, if you want to restore it, do as follows.</p>
-<p>(1) Restore iOS 9.0-10.3.3</p>
+<p>(1) Restore iOS 9.0 - 10.3.3</p>
 <p>(2) Jailbreak</p>
 <p>(4) Execution command "nvram -d boot-ramdisk"</p>
 <p>(5) Reboot</p>

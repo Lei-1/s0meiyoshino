@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.5.4 make_ipsw ****"
+echo "**** s0meiyoshino v3.5.5 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -157,18 +157,20 @@ BundleType="Down"
 #### iPhone 4 ####
 if [ $Identifier = "iPhone3,1" ]; then
     if [ $2 = "4.3.3" ]; then
+        echo "This version is incomplete and support has been discontinued."
+        exit
         #### iOS 4.3.3 ####
         ## iBoot-1072.61~2
-        iOSLIST="4"
-        iOS4Switch="433"
-        iOSVersion="4.3.3_8J2"
-        iOSBuild="8J2"
-        RestoreRamdisk="038-1449-003.dmg"
-        iBoot_Key="c2ead1d3b228a05b665c91b4b1ab54b570a81dffaf06eaf1736767bcb86e50de"
-        iBoot_IV="bb3fc29dd226fac56086790060d5c744"
-        LLB_Key="63083d71e1039bca175ac4958bcb502f655f59a56c7008d516328389a3abae4f"
-        LLB_IV="598c1dc81a30e794814d884d4baca4a9"
-        DD=1
+       #iOSLIST="4"
+       #iOS4Switch="433"
+       #iOSVersion="4.3.3_8J2"
+       #iOSBuild="8J2"
+       #RestoreRamdisk="038-1449-003.dmg"
+       #iBoot_Key="c2ead1d3b228a05b665c91b4b1ab54b570a81dffaf06eaf1736767bcb86e50de"
+       #iBoot_IV="bb3fc29dd226fac56086790060d5c744"
+       #LLB_Key="63083d71e1039bca175ac4958bcb502f655f59a56c7008d516328389a3abae4f"
+       #LLB_IV="598c1dc81a30e794814d884d4baca4a9"
+       #DD=1
     fi
 
     if [ $2 = "4.3.5" ]; then
@@ -1375,24 +1377,7 @@ unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_fla
 echo ""
 
 if [ "$iOSLIST" = "4" ]; then
-    #### iOS4Switch = 433 ####
-    if [ "$iOS4Switch" = "433" ]; then
-        #### Patching LLB4 ####
-        unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3"
-        ../bin/xpwntool LLB."$iBootInternalName".RELEASE.img3 LLB."$iBootInternalName".dec.img3 -k $LLB_Key -iv $LLB_IV -decrypt
-        ../bin/xpwntool LLB."$iBootInternalName".dec.img3 LLB."$iBootInternalName".dec
-        bspatch LLB."$iBootInternalName".dec PwnedLLB."$iBootInternalName".dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/LLB."$iBootInternalName".RELEASE.patch
-        ../bin/xpwntool PwnedLLB."$iBootInternalName".dec iBoot -t LLB."$iBootInternalName".dec.img3
-        echo "0000010: 63656269" | xxd -r - iBoot
-        echo "0000020: 63656269" | xxd -r - iBoot
-        tar -cvf bootloader.tar iBoot
-        #### Patching iBoot4 ####
-        bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
-        ../bin/xpwntool PwnediBoot."$iBootInternalName".dec iBoot4 -t iBoot."$iBootInternalName".dec.img3
-        echo "0000010: 346F6269" | xxd -r - iBoot4
-        echo "0000020: 346F6269" | xxd -r - iBoot4
-    fi
-    #### iOS4Switch = 435 ####
+   ##### iOS4Switch = 435 ####
     if [ "$iOS4Switch" = "435" ]; then
         #### Patching iBoot4 ####
         bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
@@ -1487,46 +1472,6 @@ mkdir $iOSBuild
 unzip -d $iOSBuild "$Identifier"_"$iOSVersion"_Odysseus.ipsw
 
 if [ "$iOSLIST" = "4" ]; then
-    if [ "$iOS4Switch" = "433" ]; then
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging1-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batteryfull-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
-        rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
-
-        echo "0000010: 34676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo-640x960."$SoC".img3
-        echo "0000020: 34676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo-640x960."$SoC".img3
-
-        mv -v ../src/"$ECID"-apticket.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/apticket.img3
-        cp -a -v ../src/iPhone3,1/manifest433 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
-
-        if [ "$OSXVer" -gt "10" ]; then
-            mv -v $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/apticket.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogoT-640x960."$SoC".img3
-            cp -a -v ../src/iPhone3,1/manifest433x $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/manifest
-        fi
-
-        cp -a -v ../src/iPhone3,1/433.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogoX-640x960."$SoC".img3
-        echo "0000010: 58676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogoX-640x960."$SoC".img3
-        echo "0000020: 58676F6C" | xxd -r - $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogoX-640x960."$SoC".img3
-
-        mv -v iBoot4 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot4."$iBootInternalName".RELEASE.img3
-
-        mv -v BaseFWBuild/applelogo@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/applelogo7-640x960."$SoC".img3
-        mv -v BaseFWBuild/batterycharging0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
-        mv -v BaseFWBuild/batterycharging1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging1-640x960."$SoC".img3
-        mv -v BaseFWBuild/batteryfull@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batteryfull-640x960."$SoC".img3
-        mv -v BaseFWBuild/batterylow0@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow0-640x960."$SoC".img3
-        mv -v BaseFWBuild/batterylow1@2x~iphone."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterylow1-640x960."$SoC".img3
-        mv -v BaseFWBuild/glyphplugin@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/glyphplugin-640x960."$SoC".img3
-        mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
-        mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
-        mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
-    fi
 
     if [ "$iOS4Switch" = "435" ]; then
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
@@ -1737,9 +1682,6 @@ sleep 1s
 if [ "$iOSLIST" = "4" ]; then
     mv -v ramdisk/sbin/reboot ramdisk/sbin/._
 
-    if [ "$iOS4Switch" = "433" ]; then
-        tar -xvf ../src/iPhone3,1/bin433.tar -C ramdisk/ --preserve-permissions
-    fi
     if [ "$iOS4Switch" = "435" ]; then
         tar -xvf ../src/iPhone3,1/bin4.tar -C ramdisk/ --preserve-permissions
     fi

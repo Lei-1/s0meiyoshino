@@ -1,5 +1,5 @@
 #!/bin/bash
-echo "**** s0meiyoshino v3.5.2 installer ****"
+echo "**** s0meiyoshino v3.5.5 installer ****"
 ## if [ -e "odysseus" ]; then
 ## echo "Odysseus already exist"
 ## else
@@ -56,10 +56,13 @@ if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/i
     echo "iloader already exists"
     AA=1
 else
+    if [ -e "iloader" ]; then
+        rm -rf iloader
+    fi
     git clone https://github.com/dora2-iOS/iloader.git
-    cp -a iloader/iPhone3,1/11D257/ramdiskH_beta4.dmg ./src/iPhone3,1/11D257/ramdiskH.dmg
-    cp -a iloader/iPhone5,2/11B554a/ramdiskH_beta4.dmg ./src/iPhone5,2/11B554a/ramdiskH.dmg
-    cp -a iloader/iPhone5,2/11B554a/ramdiskH_beta4.dmg ./src/iPhone5,1/11B554a/ramdiskH.dmg
+    cp -a iloader/iPhone3,1/11D257/ramdiskH.dmg ./src/iPhone3,1/11D257/ramdiskH.dmg
+    cp -a iloader/iPhone5,2/11B554a/ramdiskH.dmg ./src/iPhone5,2/11B554a/ramdiskH.dmg
+    cp -a iloader/iPhone5,2/11B554a/ramdiskH.dmg ./src/iPhone5,1/11B554a/ramdiskH.dmg
     if [ -e "iloader" ]&&[ -e "./src/iPhone3,1/11D257/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,2/11B554a/ramdiskH.dmg" ]&&[ -e "./src/iPhone5,1/11B554a/ramdiskH.dmg" ]; then
         AA=1
     else
@@ -72,7 +75,6 @@ if [ -e "ipwndfu" ]; then
     BB=1
 else
     git clone https://github.com/axi0mX/ipwndfu.git
-
     if [ -e "ipwndfu" ]; then
         BB=1
     else
@@ -88,7 +90,7 @@ else
     cd iBoot32Patcher
     clang iBoot32Patcher.c finders.c functions.c patchers.c -Wno-multichar -I. -o ../bin/iBoot32Patcher
     cd ..
-
+    rm -rf iBoot32Patcher
     if [ -e "bin/iBoot32Patcher" ]; then
         CC=1
     else
@@ -105,6 +107,7 @@ else
     make
     mv -v CBPatcher ../bin
     cd ..
+    rm -rf CBPatcher
     if [ -e "bin/CBPatcher" ]; then
         CB=1
     else
