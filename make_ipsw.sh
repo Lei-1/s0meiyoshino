@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "**** s0meiyoshino v3.5.5 make_ipsw ****"
+echo "**** s0meiyoshino v3.5.6 make_ipsw ****"
 
 if [ $# -lt 3 ]; then
     echo "./make_ipsw.sh <device model> <downgrade-iOS> <base-iOS> [arg1]"
@@ -23,10 +23,16 @@ if [ $# -lt 3 ]; then
     exit
 fi
 
+Remove_Exploit=0
+
 if [ $# == 4 ]; then
     if [ $4 != "--verbose" ] && [ $4 != "--jb" ] && [ $4 != "--remove" ]; then
         echo "[ERROR] Invalid argument"
         exit
+    fi
+
+    if [ $4 = "--remove" ]; then
+        Remove_Exploit=1
     fi
 fi
 
@@ -156,28 +162,12 @@ BundleType="Down"
 
 #### iPhone 4 ####
 if [ $Identifier = "iPhone3,1" ]; then
-    if [ $2 = "4.3.3" ]; then
-        echo "This version is incomplete and support has been discontinued."
-        exit
-        #### iOS 4.3.3 ####
-        ## iBoot-1072.61~2
-       #iOSLIST="4"
-       #iOS4Switch="433"
-       #iOSVersion="4.3.3_8J2"
-       #iOSBuild="8J2"
-       #RestoreRamdisk="038-1449-003.dmg"
-       #iBoot_Key="c2ead1d3b228a05b665c91b4b1ab54b570a81dffaf06eaf1736767bcb86e50de"
-       #iBoot_IV="bb3fc29dd226fac56086790060d5c744"
-       #LLB_Key="63083d71e1039bca175ac4958bcb502f655f59a56c7008d516328389a3abae4f"
-       #LLB_IV="598c1dc81a30e794814d884d4baca4a9"
-       #DD=1
-    fi
 
     if [ $2 = "4.3.5" ]; then
         #### iOS 4.3.5 ####
         ## iBoot-1072.61~6
         iOSLIST="4"
-        iOS4Switch="435"
+       #iOS4Switch="435"
         iOSVersion="4.3.5_8L1"
         iOSBuild="8L1"
         RestoreRamdisk="038-2265-002.dmg"
@@ -1348,7 +1338,7 @@ if [ $# == 4 ]; then
     fi
 fi
 
-if [ $iOSBuild != "11D257" ]&&[ $Identifier != "iPhone3,1" ]&&[ $4 = "--remove" ]; then
+if [ $iOSBuild != "11D257" ]&&[ $Identifier != "iPhone3,1" ]&&[ $Remove_Exploit == 1 ]; then
     echo "[ERROR] This version is NOT supported option!"
     exit
 fi
@@ -1377,15 +1367,15 @@ unzip -j ../"$Identifier"_"$iOSVersion"_Restore.ipsw "Firmware/all_flash/all_fla
 echo ""
 
 if [ "$iOSLIST" = "4" ]; then
-   ##### iOS4Switch = 435 ####
-    if [ "$iOS4Switch" = "435" ]; then
-        #### Patching iBoot4 ####
+   #### iOS4Switch = 435 ####
+   #if [ "$iOS4Switch" = "435" ]; then
+        #### Patching iBoot - iOS 4.3.5 ####
         bspatch iBoot."$iBootInternalName".dec PwnediBoot."$iBootInternalName".dec ../FirmwareBundles/"$BundleType"_"$Identifier"_"$iOSVersion".bundle/iBoot."$iBootInternalName".RELEASE.patch
         ../bin/xpwntool PwnediBoot."$iBootInternalName".dec iBoot -t iBoot."$iBootInternalName".dec.img3
         echo "0000010: 63656269" | xxd -r - iBoot
         echo "0000020: 63656269" | xxd -r - iBoot
         tar -cvf bootloader.tar iBoot
-    fi
+   #fi
 
 fi
 
@@ -1433,16 +1423,17 @@ if [ "$iOSLIST" != "4" ]; then
 fi
 
 cd ../
+
 #### Make custom ipsw by odysseus ####
-if [ "$iOSLIST" = "4" ] && [ $Identifier = "iPhone3,1" ] && [ $4 != "--remove" ]; then
+if [ $iOSLIST = "4" ]&&[ $Identifier = "iPhone3,1" ]&&[ $Remove_Exploit != 1 ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory
 fi
 
-if [ "$iOSLIST" != "4" ] && [ $Identifier = "iPhone3,1" ] && [ $4 != "--remove" ]; then
+if [ $iOSLIST != "4" ]&&[ $Identifier = "iPhone3,1" ]&&[ $Remove_Exploit != 1 ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory tmp_ipsw/bootloader.tar
 fi
 
-if [ $iOSBuild = "11D257" ]&&[ $Identifier = "iPhone3,1" ]&&[ $4 = "--remove" ]; then
+if [ $Identifier = "iPhone3,1" ]&&[ $Remove_Exploit == 1 ]; then
     ./bin/ipsw "$Identifier"_"$iOSVersion"_Restore.ipsw tmp_ipsw/"$Identifier"_"$iOSVersion"_Odysseus.ipsw -memory
 fi
 
@@ -1473,7 +1464,7 @@ unzip -d $iOSBuild "$Identifier"_"$iOSVersion"_Odysseus.ipsw
 
 if [ "$iOSLIST" = "4" ]; then
 
-    if [ "$iOS4Switch" = "435" ]; then
+   #if [ "$iOS4Switch" = "435" ]; then
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging0-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batterycharging1-640x960."$SoC".img3
         rm $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/batteryfull-640x960."$SoC".img3
@@ -1506,7 +1497,7 @@ if [ "$iOSLIST" = "4" ]; then
         mv -v BaseFWBuild/iBoot."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/iBoot."$iBootInternalName".RELEASE.img3
         mv -v BaseFWBuild/LLB."$InternalName".RELEASE.img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/LLB."$iBootInternalName".RELEASE.img3
         mv -v BaseFWBuild/recoverymode@"$Image"."$SoC".img3 $iOSBuild/Firmware/all_flash/all_flash."$InternalName".production/recoverymode-640x960."$SoC".img3
-    fi
+   #fi
 
 fi
 
@@ -1682,9 +1673,9 @@ sleep 1s
 if [ "$iOSLIST" = "4" ]; then
     mv -v ramdisk/sbin/reboot ramdisk/sbin/._
 
-    if [ "$iOS4Switch" = "435" ]; then
+   #if [ "$iOS4Switch" = "435" ]; then
         tar -xvf ../src/iPhone3,1/bin4.tar -C ramdisk/ --preserve-permissions
-    fi
+   #fi
     tar -xvf bootloader.tar -C ramdisk/ --preserve-permissions
 fi
 
@@ -1734,7 +1725,7 @@ if [ $# == 4 ]; then
     fi
 fi
 
-if [ $iOSBuild = "11D257" ]&&[ $Identifier = "iPhone3,1" ]&&[ $4 = "--remove" ]; then
+if [ $Identifier = "iPhone3,1" ]&&[ $Remove_Exploit == 1 ]; then
     rm -rf ramdisk/sbin/reboot
     rm -rf ramdisk/ramdiskH.dmg
     cp -a -v ../src/iPhone3,1/remove_exploit.sh ramdisk/sbin/reboot
